@@ -40,7 +40,13 @@ const links = paper
   : [];
 ---
 
-<Base title={d.title} description={d.subtitle} ogImage={ogImage} ogImageAlt={d.heroAlt}>
+<Base
+  title={d.title}
+  description={d.subtitle}
+  ogImage={ogImage}
+  ogImageAlt={d.heroAlt}
+  hasDemo={Boolean(d.demo)}
+>
   <article class="project">
     <header class="container project__head rise">
       <h1 class="project__title">{d.title}</h1>

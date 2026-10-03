@@ -50,7 +50,23 @@ for (const file of htmlFiles.sort()) {
 
   let raw = 0;
   let gz = 0;
+  let lazy = 0;
   const missing = [];
+  const counted = new Set();
+  const count = (p, isLazy) => {
+    if (counted.has(p)) return;
+    counted.add(p);
+    const buf = readFileSync(p);
+    raw += statSync(p).size;
+    gz += gzipSync(buf).length;
+    if (isLazy) lazy += 1;
+    // Chunks loaded later with import() count too, so lazy islands are not hidden.
+    for (const m of buf.toString('utf8').matchAll(/import\(\s*["'`]([^"'`]+)["'`]\s*\)/g)) {
+      const spec = m[1];
+      const target = spec.startsWith('/') ? toDistPath(spec, file) : resolve(dirname(p), spec);
+      if (target && existsSync(target)) count(target, true);
+    }
+  };
   for (const src of srcs) {
     const p = toDistPath(src, file);
     if (p === null) {
@@ -61,9 +77,7 @@ for (const file of htmlFiles.sort()) {
       missing.push(`${src} (not found in dist)`);
       continue;
     }
-    const buf = readFileSync(p);
-    raw += statSync(p).size;
-    gz += gzipSync(buf).length;
+    count(p, false);
   }
 
   const ok = isDemo ? gz <= DEMO_LIMIT : srcs.length === 0 && preloads === 0;
@@ -72,6 +86,7 @@ for (const file of htmlFiles.sort()) {
     page,
     kind: isDemo ? 'demo' : 'static',
     scripts: srcs.length,
+    lazy,
     preloads,
     raw: kb(raw),
     gzip: kb(gz),

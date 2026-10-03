@@ -26,20 +26,20 @@ One command runs every gate; run it before every commit and paste the output in 
 npm run check
 ```
 
-| Step          | Command                | What it verifies                                                                                                                                                    |
-| ------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                                                                           |
-| Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                                                                                      |
-| Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                                                                                      |
-| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build.                                                         |
-| Build         | `npm run build`        | `astro build` exits 0.                                                                                                                                              |
-| JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                                                                        |
-| Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                                                                              |
-| Theme         | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                                                                                            |
-| Links         | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).                                                                               |
-| Redirects     | `npm run test:e2e`     | Every `legacyPaths` entry lands on its project page with a 200.                                                                                                     |
-| Screenshots   | `npm run test:e2e`     | Home and the MobiPrint project page at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.                                               |
-| Lighthouse    | `npm run lighthouse`   | Lighthouse CI (mobile) on the home page and `/projects/mobiprint/`: Performance, Accessibility, Best Practices, SEO all at least 95. Needs Google Chrome installed. |
+| Step          | Command                | What it verifies                                                                                                                                                                               |
+| ------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                                                                                                      |
+| Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                                                                                                                 |
+| Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                                                                                                                 |
+| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build.                                                                                    |
+| Build         | `npm run build`        | `astro build` exits 0.                                                                                                                                                                         |
+| JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                                                                                                   |
+| Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                                                                                                         |
+| Theme         | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                                                                                                                       |
+| Links         | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).                                                                                                          |
+| Redirects     | `npm run test:e2e`     | Every `legacyPaths` entry lands on its project page with a 200.                                                                                                                                |
+| Screenshots   | `npm run test:e2e`     | Home and the MobiPrint project page at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.                                                                          |
+| Lighthouse    | `npm run lighthouse`   | Lighthouse CI (mobile) on the home page, `/projects/mobiprint/` and `/projects/moirewidgets/`: Performance, Accessibility, Best Practices, SEO all at least 95. Needs Google Chrome installed. |
 
 `npm run check:ci` is the subset that runs in GitHub Actions before every deploy (everything
 except the Playwright suite, whose screenshot baselines are macOS renders, and Lighthouse).
@@ -66,6 +66,8 @@ src/
   layouts/Base.astro           <head>, skip link, header, main, footer
   lib/paths.ts                 href() helper so links work at "/" and "/danielcz.xyz/"
   components/home/             About, Publications, Work sections of the home page
+  components/Demo.astro        mounts an interactive island by name
+  components/demos/            island code (MoireExplorer.ts)
   components/Figure.astro      image or looping video with caption
   layouts/Project.astro        project page: hero, metadata strip, prose, gallery, prev/next
   pages/                       index.astro, projects/[slug].astro, 404.astro, robots.txt.ts
@@ -181,6 +183,16 @@ Each project chooses how its images are shown with `galleryLayout:` in the front
 | `filmstrip` | Hero on top; after the text, a horizontally scrolling row at one height, natural aspect ratios side by side.                                                                                                               |
 
 The components live in `src/components/gallery/`; `Gallery.astro` picks one by name.
+
+### Interactive demos
+
+A project can mount an interactive island with `demo: MoireExplorer` in its frontmatter. The
+island's code (`src/components/demos/MoireExplorer.ts`, a plain web component, no framework)
+is loaded only when it scrolls near the viewport; pages without a demo ship no JavaScript, and
+the static SVG inside the element shows until the code arrives or when JavaScript is off. To add
+another demo: add its name to `DEMOS` in `src/lib/tags.ts`, write the element in
+`src/components/demos/`, and add a block for it in `src/components/Demo.astro`. The JS budget
+allows up to 60 KB gzipped on a demo page, lazy chunks included.
 
 ### Animated clips
 

@@ -12,7 +12,11 @@ module.exports = {
     collect: {
       startServerCommand: `node scripts/serve-dist.mjs ${PORT}`,
       startServerReadyPattern: 'serving',
-      url: [`${ORIGIN}${BASE}`, `${ORIGIN}${BASE}projects/mobiprint/`],
+      url: [
+        `${ORIGIN}${BASE}`,
+        `${ORIGIN}${BASE}projects/mobiprint/`,
+        `${ORIGIN}${BASE}projects/moirewidgets/`,
+      ],
       numberOfRuns: 1,
       settings: {
         // Keep audits deterministic on a laptop; throttling stays at the mobile default.

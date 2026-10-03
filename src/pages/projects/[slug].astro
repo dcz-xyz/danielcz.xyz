@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
+import Demo from '../../components/Demo.astro';
 import Project from '../../layouts/Project.astro';
 
 export async function getStaticPaths() {
@@ -22,4 +23,5 @@ const paper = paperRef ? await getEntry('publications', paperRef.id) : undefined
 
 <Project project={project} paper={paper} prev={prev} next={next}>
   <Content />
+  {project.data.demo && <Demo name={project.data.demo} slot="demo" />}
 </Project>

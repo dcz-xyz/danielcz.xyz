@@ -21,6 +21,8 @@ interface Props {
   /** Absolute URL of a social-card image; defaults to the portrait. */
   ogImage?: string;
   ogImageAlt?: string;
+  /** Page carries an interactive island; relaxes the JS budget for this page. */
+  hasDemo?: boolean;
 }
 
 const SITE_NAME = 'Daniel Campos Zamora';
@@ -45,7 +47,7 @@ const isStaging = Astro.site?.hostname.endsWith('github.io') ?? false;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-js-budget={props.hasDemo ? 'demo' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

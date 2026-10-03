@@ -1,0 +1,198 @@
+---
+import type { DEMOS } from '../lib/tags';
+
+/**
+ * Mounts an interactive island by name (the project's `demo:` field). The
+ * island's code is loaded only when it scrolls near the viewport; until then
+ * (and without JavaScript) the static fallback inside the element shows.
+ *
+ * To add a demo: add its name to DEMOS in src/lib/tags.ts, write the custom
+ * element in src/components/demos/, and add a block below.
+ */
+interface Props {
+  name: (typeof DEMOS)[number];
+}
+const { name } = Astro.props;
+---
+
+{name === 'MoireExplorer' && (
+  <section class="container demo rise" aria-labelledby="demo-heading" data-demo="MoireExplorer">
+    <h2 id="demo-heading" class="demo__title">
+      Explore the moiré effect
+    </h2>
+    <p class="demo__intro">
+      Two line gratings with a slightly different pitch or angle produce a much larger beat pattern.
+      Adjust the top layer and watch a small shift turn into a large movement of the fringes, the
+      effect MoiréWidgets uses to sense tiny motions from a distance.
+    </p>
+    <moire-explorer class="demo__island">
+      <div class="demo__fallback" data-fallback>
+        <svg
+          viewBox="0 0 720 360"
+          role="img"
+          aria-label="Two overlapping line gratings forming a moiré beat pattern"
+        >
+          <defs>
+            <pattern id="moire-bottom" width="12" height="12" patternUnits="userSpaceOnUse">
+              <rect width="6" height="12" fill="#141414" />
+            </pattern>
+            <pattern
+              id="moire-top"
+              width="12.5"
+              height="12.5"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(2)"
+            >
+              <rect width="6.25" height="12.5" fill="#141414" />
+            </pattern>
+          </defs>
+          <rect width="720" height="360" fill="#ffffff" />
+          <rect width="720" height="360" fill="url(#moire-bottom)" />
+          <rect width="720" height="360" fill="url(#moire-top)" />
+        </svg>
+        <p class="muted small">
+          The interactive version with sliders appears when JavaScript is available.
+        </p>
+      </div>
+    </moire-explorer>
+  </section>
+)}
+
+<script>
+  // Load the island only when it is about to come into view (like client:visible).
+  const island = document.querySelector('moire-explorer');
+  if (island) {
+    const load = () => import('./demos/MoireExplorer');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            load();
+          }
+        },
+        { rootMargin: '200px 0px' },
+      );
+      io.observe(island);
+    } else {
+      load();
+    }
+  }
+</script>
+
+<style is:global>
+  .demo {
+    margin-top: var(--section-pad);
+  }
+
+  .demo__title {
+    margin-bottom: var(--space-2);
+  }
+
+  .demo__intro {
+    max-width: var(--measure);
+    margin-bottom: var(--space-4);
+  }
+
+  .demo__island {
+    display: block;
+  }
+
+  .demo__fallback svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-img);
+    border: 1px solid var(--rule);
+  }
+
+  .demo__fallback p {
+    margin-top: var(--space-2);
+  }
+
+  .moire__canvas {
+    display: block;
+    width: 100%;
+    border-radius: var(--radius-img);
+    border: 1px solid var(--rule);
+  }
+
+  .moire__controls {
+    display: grid;
+    gap: var(--space-3) var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .moire__field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-1) var(--space-3);
+    align-items: center;
+    font-size: var(--fs-sm);
+  }
+
+  .moire__label {
+    font-weight: var(--fw-regular);
+  }
+
+  .moire__field output {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .moire__field input[type='range'] {
+    grid-column: 1 / -1;
+    width: 100%;
+    accent-color: var(--fg);
+  }
+
+  .moire__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--fs-sm);
+  }
+
+  .moire__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .moire__toggle input {
+    accent-color: var(--fg);
+  }
+
+  .moire__reset {
+    padding: 0.35em 1em;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--fg);
+    font-size: var(--fs-sm);
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .moire__reset:hover {
+    border-color: var(--accent);
+  }
+
+  .moire__readout {
+    margin-top: var(--space-3);
+    max-width: var(--measure);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+
+  @media (min-width: 640px) {
+    .moire__controls {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .moire__actions {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
