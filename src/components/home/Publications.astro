@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import PublicationCard from '../PublicationCard.astro';
+import { sortPublications } from '../../lib/publications';
+
+const publications = sortPublications(await getCollection('publications'));
+---
+
+<section id="publications" class="section" aria-labelledby="publications-heading">
+  <div class="container split">
+    <div class="split__aside">
+      <h2 id="publications-heading" class="rise">
+        Publications
+      </h2>
+    </div>
+    <div class="split__main">
+      <ul class="pub-list">
+        {publications.map((publication) => (
+          <li class="rise">
+            <PublicationCard publication={publication} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pub-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pub-list > li {
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--rule);
+  }
+
+  .pub-list > li:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+</style>

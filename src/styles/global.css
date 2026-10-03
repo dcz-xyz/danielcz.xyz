@@ -3,6 +3,18 @@
    Tokens live in tokens.css. Component styles live in each .astro file.
    ========================================================================== */
 
+/* ----- Fonts ------------------------------------------------------------ */
+/* Poppins faces are loaded from @fontsource (see Base.astro). This fallback
+   matches Poppins' metrics so text does not jump when the webfont arrives. */
+@font-face {
+  font-family: 'Poppins Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica');
+  ascent-override: 93.7719%;
+  descent-override: 31.2573%;
+  line-gap-override: 8.9306%;
+  size-adjust: 112.1582%;
+}
+
 /* ----- Reset ------------------------------------------------------------ */
 *,
 *::before,
@@ -195,5 +207,97 @@ a:hover {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ----- Buttons and pills --------------------------------------------- */
+/* Primary button from reference/styles.md: filled, lowercase, wide tracking. */
+.button {
+  display: inline-block;
+  padding: 0.8em 1.6em;
+  border-radius: var(--radius);
+  background: var(--fg);
+  color: var(--bg);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.2em;
+  line-height: var(--lh-tight);
+  text-transform: lowercase;
+  text-decoration: none;
+  transition:
+    background var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.button:hover {
+  background: color-mix(in srgb, var(--fg) 82%, var(--bg));
+  text-decoration: none;
+}
+
+.pill {
+  display: inline-block;
+  padding: 0.3em 0.85em;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-heading);
+  text-decoration: none;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.pill:hover {
+  border-color: var(--accent);
+  background: var(--surface);
+  text-decoration: none;
+}
+
+/* ----- Two-column section: heading aside, content main ---------------- */
+.split {
+  display: grid;
+  gap: var(--space-4) var(--space-6);
+}
+
+@media (min-width: 900px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  }
+  .split__aside > h2 {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-4));
+  }
+}
+
+/* Invisible anchor for legacy fragment aliases (e.g. #about-me). */
+.anchor-alias {
+  display: block;
+  position: relative;
+  top: calc(-1 * var(--header-h));
+  height: 0;
+}
+
+/* ----- Fade-and-rise on entry (CSS scroll-driven, no JavaScript) ------ */
+/* Elements already in view at load are past the entry range and render in
+   their final state; browsers without view() timelines show everything. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rise {
+      animation: rise var(--dur) var(--ease) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 30%;
+    }
   }
 }

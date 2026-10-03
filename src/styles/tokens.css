@@ -23,7 +23,8 @@
 
   /* ----- Typography ----------------------------------------------------- */
   --font-sans:
-    'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    'Poppins', 'Poppins Fallback', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
   --fs-base: 17px; /* rem = 17px, as in styles.md */
   --fw-light: 300;
   --fw-regular: 400;

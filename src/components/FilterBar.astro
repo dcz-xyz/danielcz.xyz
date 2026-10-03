@@ -1,0 +1,119 @@
+---
+import { PROJECT_TAGS, TAG_LABELS } from '../lib/tags';
+
+/**
+ * Filter buttons for the Work grid. The grid gets `data-filter="<tag>"` and
+ * CSS hides cards whose `data-tags` does not contain it, so the mechanism is
+ * pure CSS; the inline script only toggles the attribute and aria-pressed.
+ * Without JavaScript the bar stays hidden and every project shows.
+ */
+interface Props {
+  /** id of the <ul> that holds the project cards. */
+  gridId: string;
+  total: number;
+}
+const { gridId, total } = Astro.props;
+
+const filters = [
+  { value: 'all', label: 'All' },
+  ...PROJECT_TAGS.map((t) => ({ value: t, label: TAG_LABELS[t] })),
+];
+
+const rules = PROJECT_TAGS.map(
+  (t) => `#${gridId}[data-filter='${t}'] > :not([data-tags~='${t}']) { display: none; }`,
+).join('\n');
+---
+
+<div class="filter-bar" data-filter-bar data-grid={gridId} hidden>
+  <div class="filter-bar__group" role="group" aria-label="Filter projects">
+    {filters.map((f) => (
+      <button
+        type="button"
+        data-filter={f.value}
+        aria-pressed={f.value === 'all' ? 'true' : 'false'}
+      >
+        {f.label}
+      </button>
+    ))}
+  </div>
+  <p class="visually-hidden" aria-live="polite" data-filter-status>
+    Showing all {total} projects
+  </p>
+</div>
+
+<style is:inline set:html={rules}></style>
+
+<script is:inline>
+  (() => {
+    // The grid comes after this script in the DOM, so wait for the parser to finish.
+    const init = () => {
+      const bar = document.querySelector('[data-filter-bar]');
+      if (!bar) return;
+      const grid = document.getElementById(bar.getAttribute('data-grid') || '');
+      if (!grid) return;
+      const buttons = Array.from(bar.querySelectorAll('[data-filter]'));
+      const status = bar.querySelector('[data-filter-status]');
+      const cards = Array.from(grid.children);
+
+      const apply = (value) => {
+        grid.setAttribute('data-filter', value);
+        for (const b of buttons) {
+          b.setAttribute('aria-pressed', String(b.getAttribute('data-filter') === value));
+        }
+        if (status) {
+          const shown =
+            value === 'all'
+              ? cards.length
+              : cards.filter((c) => (c.getAttribute('data-tags') || '').split(' ').includes(value))
+                  .length;
+          status.textContent =
+            value === 'all'
+              ? `Showing all ${cards.length} projects`
+              : `Showing ${shown} of ${cards.length} projects`;
+        }
+      };
+
+      for (const b of buttons) {
+        b.addEventListener('click', () => apply(b.getAttribute('data-filter')));
+      }
+      bar.hidden = false;
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  })();
+</script>
+
+<style>
+  .filter-bar__group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .filter-bar button {
+    min-height: 2.25rem;
+    padding: 0.35em 1em;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--fg);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-tight);
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease);
+  }
+
+  .filter-bar button:hover {
+    border-color: var(--accent);
+  }
+
+  .filter-bar button[aria-pressed='true'] {
+    background: var(--fg);
+    border-color: var(--fg);
+    color: var(--bg);
+  }
+</style>

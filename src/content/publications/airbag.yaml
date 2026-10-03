@@ -9,8 +9,8 @@ venue: IEEE RoboSoft 2019
 venueFull: In 2019 2nd IEEE International Conference on Soft Robotics (RoboSoft), IEEE, Seoul, Korea (South), 502–508.
 year: 2019
 date: 2019-04-01
-thumbnail: ../../assets/images/pubs/airbag.gif
-thumbnailAlt: TODO alt text (airbag.gif)
+thumbnail: ../../assets/images/pubs/airbag.png
+thumbnailAlt: TODO alt text (airbag.png)
 links:
   pdf: /pdfs/airbag-robosoft2019.pdf
   doi: https://doi.org/10.1109/ROBOSOFT.2019.8722726

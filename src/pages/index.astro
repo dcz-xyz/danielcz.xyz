@@ -1,44 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import About from '../components/home/About.astro';
+import Publications from '../components/home/Publications.astro';
+import Work from '../components/home/Work.astro';
 ---
 
 <Base>
-  <!-- Phase 0 placeholder. Phase 2 builds the real About / Publications / Work sections. -->
-  <section id="about" class="section" aria-labelledby="about-heading">
-    <div class="container">
-      <h1 id="about-heading">Hello 👋</h1>
-      <div class="prose">
-        <p>
-          I’m a PhD student at the University of Washington in the School of Computer Science &amp;
-          Engineering as a member of the
-          <a href="https://makeabilitylab.cs.washington.edu/">Makeability Lab</a> advised by
-          <a href="https://jonfroehlich.github.io/">Jon E. Froehlich</a>. Previously, I was at
-          <a href="https://www.disneyresearch.com/">Disney Research</a> working in robotics, HCI,
-          and augmented reality; Carnegie Mellon University’s ArtFab; and ArtCenter College of
-          Design focusing on physical computing and digital fabrication.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section id="publications" class="section" aria-labelledby="publications-heading">
-    <div class="container">
-      <h2 id="publications-heading">Publications</h2>
-      <p class="muted">Placeholder. The publication list is built in Phase 2.</p>
-    </div>
-  </section>
-
-  <section id="projects" class="section" aria-labelledby="projects-heading">
-    <div class="container">
-      <h2 id="projects-heading">Work</h2>
-      <p class="muted">Placeholder. The project grid is built in Phase 2.</p>
-    </div>
-  </section>
+  <About />
+  <Publications />
+  <Work />
 </Base>
-
-<style>
-  h1,
-  h2 {
-    margin-bottom: var(--space-3);
-  }
-</style>

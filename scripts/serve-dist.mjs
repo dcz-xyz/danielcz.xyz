@@ -12,6 +12,7 @@
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize } from 'node:path';
+import { createGzip } from 'node:zlib';
 
 const DIST = 'dist';
 const BASE = ('/' + (process.env.BASE_PATH ?? '/') + '/').replace(/\/+/g, '/');
@@ -48,17 +49,26 @@ if (!existsSync(DIST)) {
 const isFile = (p) => existsSync(p) && statSync(p).isFile();
 const isDir = (p) => existsSync(p) && statSync(p).isDirectory();
 
-const send = (res, status, file) => {
+// Text responses are gzipped when the client accepts it, as GitHub Pages does,
+// so Lighthouse measures realistic transfer sizes.
+const COMPRESSIBLE = /^(text\/|application\/(json|xml|javascript))/;
+
+const send = (res, status, file, req) => {
+  const type = TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream';
+  const gzip = COMPRESSIBLE.test(type) && /\bgzip\b/.test(req?.headers['accept-encoding'] ?? '');
   res.writeHead(status, {
-    'Content-Type': TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream',
+    'Content-Type': type,
     'Cache-Control': 'no-store',
+    ...(gzip ? { 'Content-Encoding': 'gzip', Vary: 'Accept-Encoding' } : {}),
   });
-  createReadStream(file).pipe(res);
+  const stream = createReadStream(file);
+  if (gzip) stream.pipe(createGzip()).pipe(res);
+  else stream.pipe(res);
 };
 
-const notFound = (res) => {
+const notFound = (res, req) => {
   const page = join(DIST, '404.html');
-  if (isFile(page)) return send(res, 404, page);
+  if (isFile(page)) return send(res, 404, page, req);
   res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
   res.end('Not found');
 };
@@ -71,7 +81,7 @@ createServer((req, res) => {
     res.writeHead(301, { Location: BASE + url.search });
     return res.end();
   }
-  if (!pathname.startsWith(BASE)) return notFound(res);
+  if (!pathname.startsWith(BASE)) return notFound(res, req);
 
   // Strip base, neutralise traversal, map onto dist/.
   const rel = normalize('/' + pathname.slice(BASE.length)).replace(/^\/+/, '');
@@ -85,8 +95,8 @@ createServer((req, res) => {
     file = join(file, 'index.html');
   }
 
-  if (isFile(file)) return send(res, 200, file);
-  return notFound(res);
+  if (isFile(file)) return send(res, 200, file, req);
+  return notFound(res, req);
 }).listen(PORT, 'localhost', () => {
   console.log(`serving ${DIST}/ at http://localhost:${PORT}${BASE}`);
 });

@@ -8,14 +8,13 @@
  * from a fixed list, unknown fields are rejected, and cross-references
  * (publication <-> project) must resolve. See README.md for the field guide.
  */
-import { defineCollection, reference, z } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
-
-export const PROJECT_TAGS = ['research', 'not-research'] as const;
-export const DEMOS = ['MoireExplorer'] as const;
+import { DEMOS, PROJECT_TAGS } from './lib/tags';
 
 const nonEmpty = z.string().trim().min(1, 'must not be empty');
-const httpUrl = z.string().url().startsWith('http', 'must be an absolute http(s) URL');
+const httpUrl = z.url().startsWith('http', 'must be an absolute http(s) URL');
 
 const publications = defineCollection({
   loader: glob({ pattern: '*.yaml', base: './src/content/publications' }),

@@ -25,6 +25,45 @@ const nav = [
   </div>
 </header>
 
+<script is:inline>
+  /* Highlight the nav link of the section in view (home page only). The
+     sections come after the header in the DOM, so wait for the parser. */
+  (() => {
+    const init = () => {
+      const links = Array.from(document.querySelectorAll('.site-nav a[href*="#"]'));
+      if (!links.length || !('IntersectionObserver' in window)) return;
+      const targets = new Map();
+      for (const a of links) {
+        const id = (a.getAttribute('href') || '').split('#')[1];
+        const el = id && document.getElementById(id);
+        if (el) targets.set(el, a);
+      }
+      if (!targets.size) return;
+      const visible = new Set();
+      const update = () => {
+        const top = Array.from(visible).sort(
+          (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top,
+        )[0];
+        for (const a of links) a.removeAttribute('aria-current');
+        if (top) targets.get(top).setAttribute('aria-current', 'location');
+      };
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) visible.add(e.target);
+            else visible.delete(e.target);
+          }
+          update();
+        },
+        { rootMargin: '-35% 0px -55% 0px' },
+      );
+      for (const el of targets.keys()) io.observe(el);
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  })();
+</script>
+
 <style>
   .site-header {
     position: sticky;
@@ -70,7 +109,7 @@ const nav = [
   }
 
   .site-nav a:hover,
-  .site-nav a[aria-current='true'] {
+  .site-nav a[aria-current] {
     border-color: var(--accent);
   }
 

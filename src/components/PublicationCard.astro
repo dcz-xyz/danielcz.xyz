@@ -1,0 +1,138 @@
+---
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { href } from '../lib/paths';
+import { authorRuns, doiLabel } from '../lib/publications';
+
+interface Props {
+  publication: CollectionEntry<'publications'>;
+}
+const { publication } = Astro.props;
+const { title, authors, equalContribution, venue, thumbnail, thumbnailAlt, links } =
+  publication.data;
+
+const pills = [
+  links.pdf ? { label: 'PDF', url: href(links.pdf) } : null,
+  links.doi ? { label: doiLabel(links.doi), url: links.doi } : null,
+  links.video ? { label: 'Video', url: links.video } : null,
+  links.code ? { label: 'Code', url: links.code } : null,
+].filter((p): p is { label: string; url: string } => p !== null);
+
+const runs = authorRuns(authors, equalContribution);
+---
+
+<article class="pub" id={`pub-${publication.id}`}>
+  <div class="pub__thumb">
+    <Picture
+      src={thumbnail}
+      alt={thumbnailAlt}
+      width={640}
+      widths={[320, 640]}
+      sizes="(min-width: 640px) 200px, 104px"
+      formats={['avif']}
+      fallbackFormat="webp"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  <div class="pub__body">
+    <p class="pub__venue">{venue}</p>
+    <h3 class="pub__title">{title}</h3>
+    <p class="pub__authors">
+      {runs.map((a) => (
+        <Fragment>
+          {a.me ? <strong>{a.name}</strong> : a.name}
+          {a.star && <span class="pub__star">*</span>}
+          {a.separator}
+        </Fragment>
+      ))}
+    </p>
+    {equalContribution.length > 0 && <p class="pub__note">* Equal contribution</p>}
+    {pills.length > 0 && (
+      <ul class="pub__links" aria-label={`Links for ${title}`}>
+        {pills.map((p) => (
+          <li>
+            <a class="pill" href={p.url}>
+              {p.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</article>
+
+<style>
+  .pub {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: var(--space-3) var(--space-4);
+    align-items: start;
+  }
+
+  /* Figures come in many aspect ratios; show them whole inside a 16:10 slot. */
+  .pub__thumb {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--radius-img);
+  }
+
+  .pub__thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .pub__venue {
+    margin: 0 0 var(--space-1);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-tight);
+  }
+
+  .pub__title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-heading);
+    text-wrap: pretty;
+  }
+
+  .pub__authors {
+    margin: var(--space-1) 0 0;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+  }
+
+  .pub__authors strong {
+    color: var(--fg);
+    font-weight: var(--fw-medium);
+  }
+
+  .pub__star {
+    font-weight: var(--fw-medium);
+  }
+
+  .pub__note {
+    margin: var(--space-1) 0 0;
+    color: var(--muted);
+    font-size: var(--fs-xs);
+  }
+
+  .pub__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .pub {
+      grid-template-columns: 200px minmax(0, 1fr);
+    }
+  }
+</style>

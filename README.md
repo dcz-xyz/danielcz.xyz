@@ -26,21 +26,22 @@ One command runs every gate; run it before every commit and paste the output in 
 npm run check
 ```
 
-| Step          | Command                | What it verifies                                                                                            |
-| ------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------- |
-| Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                   |
-| Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                              |
-| Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                              |
-| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build. |
-| Build         | `npm run build`        | `astro build` exits 0.                                                                                      |
-| JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                |
-| Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                      |
-| Theme         | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                                    |
-| Links         | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).                       |
-| Screenshots   | `npm run test:e2e`     | Home at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.                      |
+| Step          | Command                | What it verifies                                                                                                                         |
+| ------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                                                |
+| Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                                                           |
+| Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                                                           |
+| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build.                              |
+| Build         | `npm run build`        | `astro build` exits 0.                                                                                                                   |
+| JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                                             |
+| Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                                                   |
+| Theme         | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                                                                 |
+| Links         | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).                                                    |
+| Screenshots   | `npm run test:e2e`     | Home at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.                                                   |
+| Lighthouse    | `npm run lighthouse`   | Lighthouse CI (mobile) on the home page: Performance, Accessibility, Best Practices, SEO all at least 95. Needs Google Chrome installed. |
 
 `npm run check:ci` is the subset that runs in GitHub Actions before every deploy (everything
-except the Playwright suite, whose screenshot baselines are macOS renders).
+except the Playwright suite, whose screenshot baselines are macOS renders, and Lighthouse).
 
 After an intentional visual change, regenerate the baselines and commit them:
 
@@ -63,7 +64,8 @@ src/
   components/                  Header, Footer, ThemeToggle (+ cards and figures from Phase 2)
   layouts/Base.astro           <head>, skip link, header, main, footer
   lib/paths.ts                 href() helper so links work at "/" and "/danielcz.xyz/"
-  pages/                       index.astro, robots.txt.ts (+ project pages from Phase 3)
+  components/home/             About, Publications, Work sections of the home page
+  pages/                       index.astro, projects/[slug].astro, robots.txt.ts
   styles/tokens.css            design tokens: color, type scale, spacing, motion
   styles/global.css            reset, typography, links, focus, layout helpers
 tests/                         Playwright: a11y, theme, links, screenshots
@@ -163,8 +165,8 @@ The build target is chosen by two environment variables set in the workflow:
 | `BASE_PATH` | `/danielcz.xyz/`            | `/`                       |
 
 All internal links go through `href()` from `src/lib/paths.ts`, so the same code works at
-both locations. `robots.txt` and a `noindex` meta tag keep the staging site out of search
-engines automatically; production is detected by `SITE_URL` being `https://danielcz.xyz`.
+both locations. When `SITE_URL` is a `github.io` address the build adds a `noindex` meta tag
+and a disallow-all `robots.txt`, so the staging site stays out of search engines automatically.
 
 To rehearse a staging build locally:
 

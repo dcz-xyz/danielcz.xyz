@@ -7,7 +7,9 @@ const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-prac
 for (const route of routes()) {
   for (const scheme of ['light', 'dark'] as const) {
     test(`axe: ${route} (${scheme})`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: scheme });
+      // Reduced motion disables the entry animations so below-the-fold content is
+      // fully visible and included in the contrast checks.
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
       await page.goto(route);
       const results = await new AxeBuilder({ page }).withTags(TAGS).analyze();
       const violations = results.violations.map((v) => ({

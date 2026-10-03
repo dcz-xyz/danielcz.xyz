@@ -1,0 +1,103 @@
+---
+import { Picture } from 'astro:assets';
+import portrait from '../../assets/images/portrait.jpg';
+import SocialLinks from '../SocialLinks.astro';
+
+// Copy and links are verbatim from content-source/about.md.
+const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subject=Hello!%20';
+---
+
+<section id="about" class="section about" aria-labelledby="about-heading">
+  <span id="about-me" class="anchor-alias" aria-hidden="true"></span>
+  <div class="container about__inner">
+    <div class="about__portrait rise">
+      <Picture
+        src={portrait}
+        alt="TODO alt text (portrait.jpg)"
+        width={960}
+        widths={[320, 640, 960]}
+        sizes="(min-width: 900px) 360px, (min-width: 640px) 280px, 200px"
+        formats={['avif']}
+        fallbackFormat="webp"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+    <div class="about__text rise">
+      <h1 id="about-heading" class="about__heading">
+        Hello 👋
+      </h1>
+      <div class="prose">
+        <p>
+          I’m a PhD student at the University of Washington in the School of Computer Science &amp;
+          Engineering as a member of the
+          <a href="https://makeabilitylab.cs.washington.edu/">Makeability Lab</a> advised by
+          <a href="https://jonfroehlich.github.io/">Jon E. Froehlich</a>. Previously, I was at
+          <a href="https://www.disneyresearch.com/">Disney Research</a> working in robotics, HCI,
+          and augmented reality; Carnegie Mellon University’s ArtFab; and ArtCenter College of
+          Design focusing on physical computing and digital fabrication.
+        </p>
+      </div>
+      <SocialLinks variant="solid" class="about__social" />
+      <p class="about__contact">
+        <a class="button" href={contact}>
+          Contact
+        </a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__inner {
+    display: grid;
+    gap: var(--space-5);
+    justify-items: start;
+  }
+
+  .about__portrait {
+    width: 200px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--surface);
+  }
+
+  .about__portrait :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about__heading {
+    margin-bottom: var(--space-3);
+    font-size: var(--fs-h2);
+  }
+
+  .about__social {
+    margin-top: var(--space-4);
+  }
+
+  .about__contact {
+    margin: var(--space-4) 0 0;
+  }
+
+  @media (min-width: 640px) {
+    .about__portrait {
+      width: 280px;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .about__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      align-items: center;
+      gap: var(--space-6);
+    }
+    .about__portrait {
+      width: 360px;
+      justify-self: center;
+    }
+  }
+</style>

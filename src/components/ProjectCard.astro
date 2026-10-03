@@ -1,0 +1,89 @@
+---
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { href } from '../lib/paths';
+import { TAG_LABELS } from '../lib/tags';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  /** Load the image eagerly (first row of the grid). */
+  eager?: boolean;
+}
+const { project, eager = false } = Astro.props;
+const d = project.data;
+const image = d.thumbnail ?? d.hero;
+const alt = d.thumbnail ? (d.thumbnailAlt ?? d.heroAlt) : d.heroAlt;
+const tagLine = `${d.tags.map((t) => TAG_LABELS[t]).join(', ')} · ${d.year}`;
+---
+
+<li class="project-card rise" data-tags={d.tags.join(' ')}>
+  <a class="project-card__link" href={href(`/projects/${project.id}/`)}>
+    <div class="project-card__media">
+      <Picture
+        src={image}
+        alt={alt}
+        width={800}
+        widths={[400, 600, 800]}
+        sizes="(min-width: 900px) 350px, (min-width: 640px) 45vw, 92vw"
+        formats={['avif']}
+        fallbackFormat="webp"
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    </div>
+    <h3 class="project-card__title">{d.title}</h3>
+    <p class="project-card__tag">{tagLine}</p>
+  </a>
+</li>
+
+<style>
+  .project-card {
+    margin: 0;
+  }
+
+  .project-card__link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .project-card__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius-img);
+    background: var(--surface);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .project-card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-card__title {
+    display: inline-block;
+    margin: var(--space-2) 0 0;
+    font-size: var(--fs-md);
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-heading);
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .project-card__tag {
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-regular);
+  }
+
+  .project-card__link:hover .project-card__media,
+  .project-card__link:focus-visible .project-card__media {
+    transform: translateY(-2px);
+  }
+
+  .project-card__link:hover .project-card__title,
+  .project-card__link:focus-visible .project-card__title {
+    border-color: var(--accent);
+  }
+</style>

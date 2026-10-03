@@ -22,8 +22,12 @@ export default defineConfig([
   ...astro.configs.recommended,
   ...astro.configs['jsx-a11y-strict'],
   {
-    files: ['scripts/**', 'tests/**', '*.config.*'],
+    files: ['scripts/**', 'tests/**', '*.config.*', 'lighthouserc.cjs'],
     languageOptions: { globals: { ...globals.node } },
+  },
+  {
+    files: ['lighthouserc.cjs'],
+    languageOptions: { sourceType: 'commonjs' },
   },
   {
     files: ['src/**/*.ts'],

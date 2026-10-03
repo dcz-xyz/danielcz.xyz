@@ -1,0 +1,37 @@
+---
+/**
+ * Minimal project page so the Work grid has somewhere to link.
+ * Phase 3 replaces this with the full Project layout (hero, gallery,
+ * metadata strip, prev/next, legacy redirects, social card).
+ */
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<Base title={project.data.title} description={project.data.subtitle}>
+  <article class="container section">
+    <h1>{project.data.title}</h1>
+    <p class="lead">{project.data.subtitle}</p>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  h1 {
+    margin-bottom: var(--space-2);
+  }
+  .lead {
+    margin-bottom: var(--space-5);
+    color: var(--muted);
+  }
+</style>

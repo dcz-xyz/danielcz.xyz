@@ -2,6 +2,9 @@
 import '@fontsource/poppins/latin-300.css';
 import '@fontsource/poppins/latin-400.css';
 import '@fontsource/poppins/latin-500.css';
+// Hashed URLs of the body (300) and heading (500) faces, so they can be preloaded.
+import poppins300 from '@fontsource/poppins/files/poppins-latin-300-normal.woff2?url';
+import poppins500 from '@fontsource/poppins/files/poppins-latin-500-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
@@ -27,8 +30,8 @@ const path = Astro.url.pathname;
 const canonicalPath = path.startsWith(basePath) ? path : href(path);
 const canonical = Astro.site ? new URL(canonicalPath, Astro.site).href : undefined;
 
-// Keep the staging site (github.io) out of search engines; production is danielcz.xyz.
-const isProduction = Astro.site?.hostname === 'danielcz.xyz';
+// Keep the staging site (GitHub Pages at github.io) out of search engines.
+const isStaging = Astro.site?.hostname.endsWith('github.io') ?? false;
 ---
 
 <!doctype html>
@@ -46,9 +49,11 @@ const isProduction = Astro.site?.hostname === 'danielcz.xyz';
         /* storage unavailable: follow the system */
       }
     </script>
+    <link rel="preload" as="font" type="font/woff2" href={poppins500} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={poppins300} crossorigin />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    {!isProduction && <meta name="robots" content="noindex" />}
+    {isStaging && <meta name="robots" content="noindex" />}
     {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href={href('/favicon.svg')} />
     <link rel="icon" href={href('/favicon.ico')} sizes="32x32" />

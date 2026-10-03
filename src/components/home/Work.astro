@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+import FilterBar from '../FilterBar.astro';
+import ProjectCard from '../ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section id="projects" class="section" aria-labelledby="projects-heading">
+  <div class="container">
+    <div class="work__head">
+      <h2 id="projects-heading" class="rise">
+        Work
+      </h2>
+      <FilterBar gridId="project-grid" total={projects.length} />
+    </div>
+    <ul id="project-grid" class="project-grid" data-filter="all">
+      {projects.map((project, i) => (
+        <ProjectCard project={project} eager={i < 3} />
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .work__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+    margin-bottom: var(--space-5);
+  }
+
+  .work__head h2 {
+    margin: 0;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5) var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .project-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .project-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
