@@ -19,3 +19,6 @@ test-results/
 playwright-report/
 .lighthouseci/
 public/pdfs/
+
+# Content files are Daniel's text verbatim; never reformat them
+src/content/

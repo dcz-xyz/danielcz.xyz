@@ -1,0 +1,15 @@
+# Source: content-source/publications.md. Date from the DOI record (issued).
+title: "RAIS: Towards A Robotic Mapping and Assessment Tool for Indoor Accessibility Using Commodity Hardware."
+authors:
+  - Xia Su
+  - Daniel Campos Zamora
+  - Jon E. Froehlich
+venue: ACM ASSETS 2024
+venueFull: In Proceedings of the 26th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '24). Association for Computing Machinery, New York, NY, USA, Article 86, 1–5.
+year: 2024
+date: 2024-10-27
+thumbnail: ../../assets/images/pubs/rais.jpeg
+thumbnailAlt: TODO alt text (rais.jpeg)
+links:
+  pdf: /pdfs/rais-assets2024.pdf
+  doi: https://doi.org/10.1145/3663548.3688512

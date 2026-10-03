@@ -1,0 +1,17 @@
+# Source: content-source/publications.md. Date from the DOI record (issued).
+title: Self-rising Bipedal Robot for Embracing Fall Impact and Fall Detection with Multimodal Sensing
+authors:
+  - Kenta Hirashima
+  - Daniel Campos Zamora
+  - Kevin Gim
+  - Joohyung Kim
+venue: IEEE/SICE SII 2026
+venueFull: 2026 IEEE/SICE International Symposium on System Integration (SII), Cancun, Mexico.
+year: 2026
+date: 2026-01-11
+thumbnail: ../../assets/images/pubs/self-rising.jpeg
+thumbnailAlt: Side-by-side image showing a real photo of a robot with a protective "hoop skirt" and a rendering showing the underlying bi-pedal robot.
+links:
+  # pdf: no PDF in content-source/pdfs yet (see TODO.md)
+  doi: https://doi.org/10.1109/SII64115.2026.11404570
+  video: https://www.youtube.com/watch?v=zklqW-EtVIY

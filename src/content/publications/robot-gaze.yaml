@@ -1,0 +1,23 @@
+# Source: content-source/publications.md. Date from the DOI record (issued).
+title: Realistic and Interactive Robot Gaze
+authors:
+  - Matthew K.X.J. Pan
+  - Sungjoon Choi
+  - James Kennedy
+  - Kyna McIntosh
+  - Daniel Campos Zamora
+  - Gunter Niemeyer
+  - Joohyung Kim
+  - Alexis Wieland
+  - David Christensen
+venue: IEEE IROS 2020
+venueFull: In 2020 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), IEEE, Las Vegas, NV, USA, 11072–11078.
+year: 2020
+date: 2020-10-24
+thumbnail: ../../assets/images/pubs/robot-gaze.jpeg
+thumbnailAlt: TODO alt text (robot-gaze.jpeg)
+links:
+  pdf: /pdfs/robot-gaze-iros2020.pdf
+  doi: https://doi.org/10.1109/IROS45743.2020.9341297
+  video: https://www.youtube.com/watch?v=D8_VmWWRJgE
+project: robot-gaze

@@ -1,0 +1,18 @@
+# Source: content-source/publications.md. The DOI record gives only "April 2019"
+# for the date, so the 1st is used; the day does not affect ordering.
+title: Development of Airbag Fabrication Machine and Process for Physical Human Machine Interaction
+authors:
+  - Eric Sebastian Sanchez
+  - Daniel Campos Zamora
+  - Joohyung Kim
+venue: IEEE RoboSoft 2019
+venueFull: In 2019 2nd IEEE International Conference on Soft Robotics (RoboSoft), IEEE, Seoul, Korea (South), 502–508.
+year: 2019
+date: 2019-04-01
+thumbnail: ../../assets/images/pubs/airbag.gif
+thumbnailAlt: TODO alt text (airbag.gif)
+links:
+  pdf: /pdfs/airbag-robosoft2019.pdf
+  doi: https://doi.org/10.1109/ROBOSOFT.2019.8722726
+  video: https://www.youtube.com/watch?v=fKCxnRy2UJE
+project: soft-robot-interfaces

@@ -26,17 +26,18 @@ One command runs every gate; run it before every commit and paste the output in 
 npm run check
 ```
 
-| Step            | Command                | What it verifies                                                                             |
-| --------------- | ---------------------- | -------------------------------------------------------------------------------------------- |
-| Format          | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                    |
-| Lint            | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                               |
-| Types + content | `npm run typecheck`    | `astro check`: TypeScript and content-collection schemas.                                    |
-| Build           | `npm run build`        | `astro build` exits 0.                                                                       |
-| JS budget       | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped. |
-| Accessibility   | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                       |
-| Theme           | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                     |
-| Links           | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).        |
-| Screenshots     | `npm run test:e2e`     | Home at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.       |
+| Step          | Command                | What it verifies                                                                                            |
+| ------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                   |
+| Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                              |
+| Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                              |
+| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build. |
+| Build         | `npm run build`        | `astro build` exits 0.                                                                                      |
+| JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                |
+| Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                      |
+| Theme         | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                                    |
+| Links         | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).                       |
+| Screenshots   | `npm run test:e2e`     | Home at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.                      |
 
 `npm run check:ci` is the subset that runs in GitHub Actions before every deploy (everything
 except the Playwright suite, whose screenshot baselines are macOS renders).
@@ -51,10 +52,14 @@ npm run shots:update
 
 ```
 .github/workflows/deploy.yml   build, run gates, deploy to GitHub Pages
-public/                        static files copied as-is (favicon, pdfs/)
+public/pdfs/                   self-hosted paper PDFs, linked from publications
 scripts/js-budget.mjs          JS budget gate
 scripts/serve-dist.mjs         static server for the Playwright tests (mimics GitHub Pages)
 src/
+  assets/images/              portrait, pubs/<key>.*, projects/<slug>/*
+  content.config.ts           collection schemas (publications, projects)
+  content/publications/       one YAML file per paper
+  content/projects/           one Markdown file per project
   components/                  Header, Footer, ThemeToggle (+ cards and figures from Phase 2)
   layouts/Base.astro           <head>, skip link, header, main, footer
   lib/paths.ts                 href() helper so links work at "/" and "/danielcz.xyz/"
@@ -73,16 +78,76 @@ grayscale in both themes; `--accent` is the single token to change if a color is
 Dark mode follows the system preference and can be overridden with the toggle in the footer,
 which stores the choice in `localStorage`.
 
-## Add a paper
+## Content
 
-_Content collections arrive in Phase 1. This section will describe the YAML file to add under
-`src/content/publications/` and where to put the thumbnail (`src/assets/images/pubs/`) and PDF
-(`public/pdfs/`)._
+All site content lives in `src/content/` and is validated against the schemas in
+`src/content.config.ts` on every build. An entry with a missing field, an unknown field, a bad tag,
+a missing image, or empty alt text fails the build with a message naming the file. The original
+material Daniel supplied is kept in `content-source/` for reference; after Phase 1 it is **not**
+read by the site, so edit `src/content/`.
 
-## Add a project
+`npm run content` prints a report: entry counts, publication order, and any alt text still marked
+`TODO`. Placeholder alt text is allowed during development and becomes a hard failure at launch
+(`node scripts/content-report.mjs --strict`).
 
-_Content collections arrive in Phase 1. This section will describe the Markdown file to add
-under `src/content/projects/` and the images under `src/assets/images/projects/<slug>/`._
+### Add a paper
+
+1. Put the thumbnail in `src/assets/images/pubs/<key>.<jpg|png|webp>` and the PDF in
+   `public/pdfs/<key>-<venue><year>.pdf` (for example `mobiprint-uist2024.pdf`).
+2. Create `src/content/publications/<key>.yaml`:
+
+```yaml
+title: 'MobiPrint: A Mobile 3D Printer for Environment-Scale Design and Fabrication'
+authors: # in print order
+  - Daniel Campos Zamora
+  - Liang He
+  - Jon E. Froehlich
+equalContribution: [] # names from `authors` that get the * marker
+venue: ACM UIST 2024 # short tag shown on the card
+venueFull: In Proceedings of the 37th Annual ACM Symposium on User Interface Software and Technology (UIST '24)
+year: 2024
+date: 2024-10-11 # drives newest-first ordering; the DOI record has it
+thumbnail: ../../assets/images/pubs/mobiprint.jpg
+thumbnailAlt: MobiPrint, a 3D printer mounted on a robot vacuum, on a white background
+links:
+  pdf: /pdfs/mobiprint-uist2024.pdf # optional
+  doi: https://doi.org/10.1145/3654777.3676459 # optional
+  video: https://www.youtube.com/watch?v=SknW-Oygh3w # optional
+  code: https://github.com/... # optional
+project: mobiprint # optional: slug of the related project page
+```
+
+The file name (without `.yaml`) is the paper's key, used by `project.links.paper`.
+
+### Add a project
+
+1. Put the images in `src/assets/images/projects/<slug>/`.
+2. Create `src/content/projects/<slug>.md`. The slug becomes the URL: `/projects/<slug>/`.
+
+```markdown
+---
+title: MobiPrint
+subtitle: A pipeline for in-situ design and fabrication to adapt physical environments.
+year: 2024 # or a range as a string, e.g. "2011-2015"
+tags: [research] # research | not-research
+order: 3 # position in the Work grid, 1 = first
+collaborators: [Jon E. Froehlich, Liang He]
+hero: ../../assets/images/projects/mobiprint/img-8880.jpg
+heroAlt: The MobiPrint robot on a white background
+thumbnail: ../../assets/images/projects/mobiprint/banner-2.jpg # optional card image, defaults to hero
+thumbnailAlt: MobiPrint printing on a wooden floor
+gallery: # optional, shown in this order on the project page
+  - src: ../../assets/images/projects/mobiprint/banner-2.jpg
+    alt: MobiPrint printing on a wooden floor
+    caption: Optional caption
+video: https://www.youtube.com/watch?v=... # optional, shown in the hero slot
+links:
+  paper: mobiprint # optional publication key
+legacyPaths: [/mobiprint] # old Squarespace paths that redirect here
+---
+
+Body text in Markdown. Paragraphs, links and emphasis work as usual.
+```
 
 ## Deploy
 

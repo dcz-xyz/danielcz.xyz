@@ -1,0 +1,20 @@
+# Source: content-source/publications.md. Date from the DOI record (issued).
+title: "NightLight: Passively Mapping Night-time Sidewalk Light Data for Improved Pedestrian Routing"
+authors:
+  - Joseph Breda
+  - Daniel Campos Zamora
+  - Shwetak Patel
+  - Jon E. Froehlich
+equalContribution:
+  - Joseph Breda
+  - Daniel Campos Zamora
+venue: ACM CHI 2025
+venueFull: In Proceedings of the 43rd Annual ACM Conference on Human Factor in Computing Systems (CHI ’25). Yokohama, Japan
+year: 2025
+date: 2025-04-25
+thumbnail: ../../assets/images/pubs/nightlight.png
+thumbnailAlt: TODO alt text (nightlight.png)
+links:
+  pdf: /pdfs/nightlight-chi2025.pdf
+  doi: https://doi.org/10.1145/3706598.3714299
+  video: https://www.youtube.com/watch?v=ETYFL3EX4D0
