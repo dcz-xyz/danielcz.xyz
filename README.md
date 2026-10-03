@@ -173,12 +173,12 @@ previous / next links. Every `legacyPaths` entry becomes a static redirect page 
 Each project chooses how its images are shown with `galleryLayout:` in the frontmatter
 (`src/lib/gallery.ts` holds the list and the site-wide default, currently `slideshow`):
 
-| Layout      | What it does                                                                                                                                                                                 |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `slideshow` | One large image at a time with arrows, a thumbnail strip, keyboard and swipe, like the old Squarespace carousel. The hero is the first slide. Works without JavaScript as a swipeable strip. |
-| `grid`      | Hero on top; after the text, a two-column grid of figures with captions.                                                                                                                     |
-| `stack`     | Hero on top; after the text, full-width figures one after another (photo-essay style).                                                                                                       |
-| `filmstrip` | Hero on top; after the text, a horizontally scrolling row at one height, natural aspect ratios side by side.                                                                                 |
+| Layout      | What it does                                                                                                                                                                                                               |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slideshow` | The default. One large image at a time on a 16:10 stage with arrows, a thumbnail strip, keyboard and swipe, like the old Squarespace carousel. The hero is the first slide. Works without JavaScript as a swipeable strip. |
+| `grid`      | Hero on top; after the text, a two-column grid of figures with captions.                                                                                                                                                   |
+| `stack`     | Hero on top; after the text, full-width figures one after another (photo-essay style).                                                                                                                                     |
+| `filmstrip` | Hero on top; after the text, a horizontally scrolling row at one height, natural aspect ratios side by side.                                                                                                               |
 
 The components live in `src/components/gallery/`; `Gallery.astro` picks one by name.
 

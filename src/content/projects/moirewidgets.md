@@ -6,7 +6,6 @@ year: 2024
 tags: [research]
 order: 1
 collaborators: [Adobe Research]
-galleryLayout: filmstrip # slideshow | grid | stack | filmstrip (see README)
 hero: ../../assets/images/projects/moirewidgets/teaser-figure.png
 heroAlt: TODO alt text (teaser-figure.png)
 thumbnail: ../../assets/images/projects/moirewidgets/hand-dial-3.png

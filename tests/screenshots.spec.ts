@@ -12,13 +12,6 @@ const pages: { name: string; path: string }[] = [
   { name: 'project', path: `${BASE}projects/mobiprint/` },
 ];
 
-/** One capture per gallery layout (1280 px, light) so the options can be compared. */
-const galleryPages: { name: string; path: string }[] = [
-  { name: 'gallery-grid', path: `${BASE}projects/soft-robot-interfaces/` },
-  { name: 'gallery-stack', path: `${BASE}projects/camera-obscura/` },
-  { name: 'gallery-filmstrip', path: `${BASE}projects/moirewidgets/` },
-];
-
 /** Force lazy images to load, reset videos to their posters, wait for fonts: deterministic captures. */
 async function settle(page: Page) {
   await page.evaluate(async () => {
@@ -66,19 +59,6 @@ for (const p of pages) {
     await page.goto(p.path);
     await settle(page);
     await expect(page).toHaveScreenshot(`${p.name}-1280-dark.png`, {
-      fullPage: true,
-      animations: 'disabled',
-    });
-  });
-}
-
-for (const p of galleryPages) {
-  test(`${p.name} @ 1280px (light)`, async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 900 });
-    await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
-    await page.goto(p.path);
-    await settle(page);
-    await expect(page).toHaveScreenshot(`${p.name}-1280.png`, {
       fullPage: true,
       animations: 'disabled',
     });

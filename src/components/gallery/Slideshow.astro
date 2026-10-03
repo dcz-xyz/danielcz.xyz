@@ -198,10 +198,12 @@ const slideId = (i: number) => `${id}-slide-${i + 1}`;
     position: relative;
   }
 
+  /* Always the full container width at 16:10, so the stage (and the arrows
+     positioned on it) stay centred; the image is fitted and centred inside. */
   .slideshow__stage {
     display: flex;
+    width: 100%;
     aspect-ratio: 16 / 10;
-    max-height: 72vh;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
