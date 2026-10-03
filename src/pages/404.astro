@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Work from '../components/home/Work.astro';
+import { href } from '../lib/paths';
+---
+
+<Base title="Page not found" description="That page does not exist. Here is the work instead.">
+  <section class="container section not-found" aria-labelledby="not-found-heading">
+    <h1 id="not-found-heading">Page not found</h1>
+    <p class="lead">
+      There is nothing at this address. <a href={href('/')}>Go to the home page</a> or pick a
+      project below.
+    </p>
+  </section>
+  <Work />
+</Base>
+
+<style>
+  .not-found {
+    padding-bottom: 0;
+  }
+  .not-found h1 {
+    margin-bottom: var(--space-3);
+  }
+  .lead {
+    max-width: var(--measure);
+  }
+</style>

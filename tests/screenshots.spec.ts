@@ -7,7 +7,10 @@ import { BASE } from './helpers/site';
  */
 const WIDTHS = [375, 900, 1280] as const;
 
-const pages: { name: string; path: string }[] = [{ name: 'home', path: BASE }];
+const pages: { name: string; path: string }[] = [
+  { name: 'home', path: BASE },
+  { name: 'project', path: `${BASE}projects/mobiprint/` },
+];
 
 /** Force lazy images to load and wait for them and the fonts, so captures are deterministic. */
 async function settle(page: import('@playwright/test').Page) {

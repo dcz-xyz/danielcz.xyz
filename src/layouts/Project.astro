@@ -1,0 +1,293 @@
+---
+import { getImage } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Base from './Base.astro';
+import Figure from '../components/Figure.astro';
+import { href } from '../lib/paths';
+import { doiLabel } from '../lib/publications';
+import { TAG_LABELS } from '../lib/tags';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  /** Publication linked from the project's frontmatter, if any. */
+  paper?: CollectionEntry<'publications'>;
+  prev: CollectionEntry<'projects'>;
+  next: CollectionEntry<'projects'>;
+}
+const { project, paper, prev, next } = Astro.props;
+const d = project.data;
+
+// Social card: the hero at 1200px wide, as an absolute URL.
+const og = await getImage({ src: d.hero, width: 1200, format: 'jpg' });
+const ogImage = Astro.site ? new URL(og.src, Astro.site).href : undefined;
+
+const links = paper
+  ? [
+      { label: 'Publication', url: href(`/#pub-${paper.id}`) },
+      paper.data.links.pdf ? { label: 'PDF', url: href(paper.data.links.pdf) } : null,
+      paper.data.links.doi
+        ? { label: doiLabel(paper.data.links.doi), url: paper.data.links.doi }
+        : null,
+      paper.data.links.video ? { label: 'Video', url: paper.data.links.video } : null,
+      paper.data.links.code ? { label: 'Code', url: paper.data.links.code } : null,
+    ].filter((l): l is { label: string; url: string } => l !== null)
+  : [];
+---
+
+<Base title={d.title} description={d.subtitle} ogImage={ogImage} ogImageAlt={d.heroAlt}>
+  <article class="project">
+    <header class="container project__head rise">
+      <h1 class="project__title">{d.title}</h1>
+      <p class="project__subtitle">{d.subtitle}</p>
+    </header>
+
+    <div class="container project__hero rise">
+      <Figure
+        src={d.hero}
+        alt={d.heroAlt}
+        widths={[640, 960, 1280, 1600]}
+        sizes="(min-width: 1216px) 1120px, calc(100vw - 2 * var(--gutter))"
+        priority
+      />
+      {d.video && (
+        <a class="project__watch button" href={d.video}>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          Watch the video
+        </a>
+      )}
+    </div>
+
+    <div class="container project__body">
+      <dl class="project__meta rise">
+        <div>
+          <dt>Year</dt>
+          <dd>{d.year}</dd>
+        </div>
+        <div>
+          <dt>Type</dt>
+          <dd>{d.tags.map((t) => TAG_LABELS[t]).join(', ')}</dd>
+        </div>
+        {d.collaborators.length > 0 && (
+          <div>
+            <dt>Collaborators</dt>
+            <dd>{d.collaborators.join(', ')}</dd>
+          </div>
+        )}
+        {paper && (
+          <div>
+            <dt>Venue</dt>
+            <dd>{paper.data.venue}</dd>
+          </div>
+        )}
+        {links.length > 0 && (
+          <div class="project__meta-links">
+            <dt>Links</dt>
+            <dd>
+              <ul class="project__links" aria-label="Related links">
+                {links.map((l) => (
+                  <li>
+                    <a class="pill" href={l.url}>
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        )}
+      </dl>
+
+      <div class="prose project__prose rise">
+        <slot />
+      </div>
+    </div>
+
+    {d.gallery.length > 0 && (
+      <section class="container project__gallery" aria-label="Gallery">
+        <ul class="project__gallery-grid">
+          {d.gallery.map((item) => (
+            <li class="rise">
+              <Figure src={item.src} alt={item.alt} caption={item.caption} video={item.video} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <slot name="demo" />
+
+    <nav class="container project__nav" aria-label="More projects">
+      <a class="project__nav-link project__nav-link--prev" href={href(`/projects/${prev.id}/`)}>
+        <span class="project__nav-label">Previous project</span>
+        <span class="project__nav-title">{prev.data.title}</span>
+      </a>
+      <a class="project__nav-link project__nav-link--next" href={href(`/projects/${next.id}/`)}>
+        <span class="project__nav-label">Next project</span>
+        <span class="project__nav-title">{next.data.title}</span>
+      </a>
+    </nav>
+  </article>
+</Base>
+
+<script is:inline>
+  /* All motion off under prefers-reduced-motion: stop looping gallery videos. */
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (const v of document.querySelectorAll('video[autoplay]')) {
+      v.removeAttribute('autoplay');
+      v.pause();
+    }
+  }
+</script>
+
+<style>
+  .project {
+    padding-block: var(--space-6) var(--section-pad);
+  }
+
+  .project__title {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-2);
+  }
+
+  .project__subtitle {
+    max-width: var(--measure);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-heading);
+    color: var(--muted);
+  }
+
+  .project__hero {
+    position: relative;
+    margin-top: var(--space-5);
+  }
+
+  .project__watch {
+    position: absolute;
+    right: calc(var(--gutter) + var(--space-3));
+    bottom: var(--space-3);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    letter-spacing: 0.05em;
+    text-transform: none;
+  }
+
+  .project__watch svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+  }
+
+  .project__body {
+    display: grid;
+    gap: var(--space-5);
+    margin-top: var(--space-5);
+  }
+
+  .project__meta {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding-block: var(--space-3);
+    border-block: 1px solid var(--rule);
+    font-size: var(--fs-sm);
+  }
+
+  .project__meta > div {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .project__meta dt {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .project__meta dd {
+    margin: 0;
+  }
+
+  .project__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project__gallery {
+    margin-top: var(--section-pad);
+  }
+
+  .project__gallery-grid {
+    display: grid;
+    gap: var(--space-5) var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project__nav {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--section-pad);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
+  }
+
+  .project__nav-link {
+    display: grid;
+    gap: var(--space-1);
+    text-decoration: none;
+  }
+
+  .project__nav-link--next {
+    text-align: end;
+  }
+
+  .project__nav-label {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .project__nav-title {
+    font-weight: var(--fw-medium);
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .project__nav-link:hover .project__nav-title {
+    border-color: var(--accent);
+  }
+
+  @media (min-width: 640px) {
+    .project__gallery-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .project__nav {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .project__body {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: var(--space-6);
+    }
+    .project__meta {
+      align-content: start;
+      position: sticky;
+      top: calc(var(--header-h) + var(--space-4));
+    }
+  }
+</style>

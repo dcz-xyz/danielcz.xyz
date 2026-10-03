@@ -26,19 +26,20 @@ One command runs every gate; run it before every commit and paste the output in 
 npm run check
 ```
 
-| Step          | Command                | What it verifies                                                                                                                         |
-| ------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                                                |
-| Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                                                           |
-| Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                                                           |
-| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build.                              |
-| Build         | `npm run build`        | `astro build` exits 0.                                                                                                                   |
-| JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                                             |
-| Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                                                   |
-| Theme         | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                                                                 |
-| Links         | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).                                                    |
-| Screenshots   | `npm run test:e2e`     | Home at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.                                                   |
-| Lighthouse    | `npm run lighthouse`   | Lighthouse CI (mobile) on the home page: Performance, Accessibility, Best Practices, SEO all at least 95. Needs Google Chrome installed. |
+| Step          | Command                | What it verifies                                                                                                                                                    |
+| ------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                                                                           |
+| Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                                                                                      |
+| Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                                                                                      |
+| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build.                                                         |
+| Build         | `npm run build`        | `astro build` exits 0.                                                                                                                                              |
+| JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                                                                        |
+| Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                                                                              |
+| Theme         | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                                                                                            |
+| Links         | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).                                                                               |
+| Redirects     | `npm run test:e2e`     | Every `legacyPaths` entry lands on its project page with a 200.                                                                                                     |
+| Screenshots   | `npm run test:e2e`     | Home and the MobiPrint project page at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.                                               |
+| Lighthouse    | `npm run lighthouse`   | Lighthouse CI (mobile) on the home page and `/projects/mobiprint/`: Performance, Accessibility, Best Practices, SEO all at least 95. Needs Google Chrome installed. |
 
 `npm run check:ci` is the subset that runs in GitHub Actions before every deploy (everything
 except the Playwright suite, whose screenshot baselines are macOS renders, and Lighthouse).
@@ -65,7 +66,10 @@ src/
   layouts/Base.astro           <head>, skip link, header, main, footer
   lib/paths.ts                 href() helper so links work at "/" and "/danielcz.xyz/"
   components/home/             About, Publications, Work sections of the home page
-  pages/                       index.astro, projects/[slug].astro, robots.txt.ts
+  components/Figure.astro      image or looping video with caption
+  layouts/Project.astro        project page: hero, metadata strip, prose, gallery, prev/next
+  pages/                       index.astro, projects/[slug].astro, 404.astro, robots.txt.ts
+public/video/                  MP4 clips for gallery items
   styles/tokens.css            design tokens: color, type scale, spacing, motion
   styles/global.css            reset, typography, links, focus, layout helpers
 tests/                         Playwright: a11y, theme, links, screenshots
@@ -158,6 +162,25 @@ legacyPaths: [/mobiprint] # old Squarespace paths that redirect here
 
 Body text in Markdown. Paragraphs, links and emphasis work as usual.
 ```
+
+Project pages render at `/projects/<slug>/` with the title, subtitle, hero, a metadata strip
+(year, type, collaborators, venue and links from the linked paper), the body, the gallery, and
+previous / next links. Every `legacyPaths` entry becomes a static redirect page at build time
+(read from the frontmatter by `astro.config.mjs`), so old Squarespace URLs keep working.
+
+### Animated clips
+
+Gallery items can be silent looping videos: put an MP4 in `public/video/<slug>/`, give the item a
+still frame as `src` (used as the poster and for the social card), and add
+`video: /video/<slug>/<file>.mp4`. The seven animated GIFs from the old site were converted this
+way with ffmpeg (`-c:v libx264 -crf 26 -pix_fmt yuv420p -an`), shrinking them from up to 18 MB to
+under 350 KB each; the originals stay in `content-source/`. Videos pause automatically for
+visitors who prefer reduced motion and always have controls.
+
+### YouTube videos
+
+A project's `video` field (a YouTube URL) adds a "Watch the video" button over the hero. The site
+does not embed YouTube's player, which keeps third-party scripts and cookies off the page.
 
 ## Deploy
 

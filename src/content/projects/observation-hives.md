@@ -15,8 +15,11 @@ gallery:
     alt: TODO alt text (beehive.jpg)
   - src: ../../assets/images/projects/observation-hives/bees1.jpg
     alt: TODO alt text (bees1.jpg)
-  - src: ../../assets/images/projects/observation-hives/urban-bees.gif
-    alt: TODO alt text (urban-bees.gif)
+  - src: ../../assets/images/projects/observation-hives/urban-bees.png
+
+    video: /video/observation-hives/urban-bees.mp4
+
+    alt: TODO alt text (urban-bees.gif, shown as video)
 legacyPaths: [/observation-hive]
 ---
 

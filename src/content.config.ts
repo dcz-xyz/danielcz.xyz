@@ -83,9 +83,18 @@ const projects = defineCollection({
           .array(
             z
               .object({
+                /** Still image; for a video this is its poster frame. */
                 src: image(),
                 alt: nonEmpty,
                 caption: z.string().optional(),
+                /** Optional silent MP4 in public/video/, played muted in a loop. */
+                video: z
+                  .string()
+                  .regex(
+                    /^\/video\/[\w./-]+\.mp4$/,
+                    'video must look like /video/<slug>/<file>.mp4',
+                  )
+                  .optional(),
               })
               .strict(),
           )

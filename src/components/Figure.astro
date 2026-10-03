@@ -1,0 +1,93 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { href } from '../lib/paths';
+
+/**
+ * Image (or silent looping video with a poster) with an optional caption.
+ * Used for project heroes and gallery items.
+ */
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  /** Public path to an MP4; `src` becomes its poster frame. */
+  video?: string;
+  widths?: number[];
+  sizes?: string;
+  /** Load eagerly with high priority (the hero). */
+  priority?: boolean;
+  class?: string;
+}
+const {
+  src,
+  alt,
+  caption,
+  video,
+  widths = [480, 800, 1200],
+  sizes = '(min-width: 900px) 540px, (min-width: 640px) 45vw, 92vw',
+  priority = false,
+  class: className,
+} = Astro.props;
+
+const poster = video ? await getImage({ src, width: 1200, format: 'webp' }) : null;
+---
+
+<figure class:list={['figure', className]}>
+  {video && poster ? (
+    <video
+      class="figure__media"
+      width={src.width}
+      height={src.height}
+      poster={poster.src}
+      autoplay
+      muted
+      loop
+      playsinline
+      controls
+      preload="metadata"
+      aria-label={alt}
+    >
+      <source src={href(video)} type="video/mp4" />
+    </video>
+  ) : (
+    <Picture
+      class="figure__media"
+      src={src}
+      alt={alt}
+      width={Math.min(src.width, widths[widths.length - 1] ?? src.width)}
+      widths={widths.filter((w) => w <= src.width).length ? widths : [src.width]}
+      sizes={sizes}
+      formats={['avif']}
+      fallbackFormat="webp"
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      decoding="async"
+    />
+  )}
+  {caption && <figcaption class="figure__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .figure {
+    margin: 0;
+  }
+
+  .figure :global(picture) {
+    display: block;
+  }
+
+  .figure :global(.figure__media) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-img);
+    background: var(--surface);
+  }
+
+  .figure__caption {
+    margin-top: var(--space-2);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+</style>
