@@ -22,6 +22,16 @@ export default defineConfig([
   ...astro.configs.recommended,
   ...astro.configs['jsx-a11y-strict'],
   {
+    files: ['**/*.astro'],
+    rules: {
+      // Scrollable galleries must be keyboard-focusable (axe: scrollable-region-focusable).
+      'astro/jsx-a11y/no-noninteractive-tabindex': [
+        'error',
+        { roles: ['tabpanel', 'region', 'group'] },
+      ],
+    },
+  },
+  {
     files: ['scripts/**', 'tests/**', '*.config.*', 'lighthouserc.cjs'],
     languageOptions: { globals: { ...globals.node } },
   },

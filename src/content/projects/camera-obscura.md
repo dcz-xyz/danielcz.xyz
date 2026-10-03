@@ -6,6 +6,7 @@ year: 2021
 tags: [not-research]
 order: 2
 collaborators: []
+galleryLayout: stack # slideshow | grid | stack | filmstrip (see README)
 hero: ../../assets/images/projects/camera-obscura/concept-sketch-01.jpg
 heroAlt: TODO alt text (concept-sketch-01.jpg)
 gallery:

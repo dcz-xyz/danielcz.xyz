@@ -1,0 +1,34 @@
+---
+import type { GalleryItem } from '../../lib/gallery';
+import Figure from '../Figure.astro';
+
+interface Props {
+  items: GalleryItem[];
+  label: string;
+}
+const { items, label } = Astro.props;
+---
+
+<ul class="gallery-grid" aria-label={label}>
+  {items.map((item) => (
+    <li class="rise">
+      <Figure src={item.src} alt={item.alt} caption={item.caption} video={item.video} />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .gallery-grid {
+    display: grid;
+    gap: var(--space-5) var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

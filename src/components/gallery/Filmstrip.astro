@@ -1,0 +1,81 @@
+---
+import type { GalleryItem } from '../../lib/gallery';
+import Figure from '../Figure.astro';
+
+/** A horizontally scrolling row of figures at one height, natural aspect ratios side by side. */
+interface Props {
+  items: GalleryItem[];
+  label: string;
+}
+const { items, label } = Astro.props;
+---
+
+<div class="filmstrip-wrap">
+  <div class="filmstrip" role="region" aria-label={`${label}, scrolls sideways`} tabindex="0">
+    <ul class="filmstrip__list">
+      {items.map((item) => (
+        <li class="filmstrip__item">
+          <Figure
+            src={item.src}
+            alt={item.alt}
+            caption={item.caption}
+            video={item.video}
+            widths={[480, 800, 1200, 1600]}
+            sizes="(min-width: 900px) 60vw, 85vw"
+          />
+        </li>
+      ))}
+    </ul>
+  </div>
+  <p class="filmstrip__hint muted small">Scroll sideways to see more.</p>
+</div>
+
+<style>
+  .filmstrip {
+    --filmstrip-h: clamp(220px, 42vh, 380px);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--space-3);
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filmstrip:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .filmstrip__list {
+    display: flex;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0 0 var(--space-2);
+    list-style: none;
+  }
+
+  .filmstrip__item {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .filmstrip__item :global(figure) {
+    display: grid;
+    grid-template-rows: var(--filmstrip-h) auto;
+  }
+
+  /* Each image keeps its own aspect ratio at the strip height; wide ones scroll. */
+  .filmstrip__item :global(picture) {
+    height: 100%;
+    max-width: none;
+  }
+
+  .filmstrip__item :global(.figure__media) {
+    width: auto;
+    max-width: none;
+    height: 100%;
+  }
+
+  .filmstrip__hint {
+    margin: var(--space-2) 0 0;
+  }
+</style>

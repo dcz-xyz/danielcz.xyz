@@ -168,6 +168,20 @@ Project pages render at `/projects/<slug>/` with the title, subtitle, hero, a me
 previous / next links. Every `legacyPaths` entry becomes a static redirect page at build time
 (read from the frontmatter by `astro.config.mjs`), so old Squarespace URLs keep working.
 
+### Gallery layouts
+
+Each project chooses how its images are shown with `galleryLayout:` in the frontmatter
+(`src/lib/gallery.ts` holds the list and the site-wide default, currently `slideshow`):
+
+| Layout      | What it does                                                                                                                                                                                 |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slideshow` | One large image at a time with arrows, a thumbnail strip, keyboard and swipe, like the old Squarespace carousel. The hero is the first slide. Works without JavaScript as a swipeable strip. |
+| `grid`      | Hero on top; after the text, a two-column grid of figures with captions.                                                                                                                     |
+| `stack`     | Hero on top; after the text, full-width figures one after another (photo-essay style).                                                                                                       |
+| `filmstrip` | Hero on top; after the text, a horizontally scrolling row at one height, natural aspect ratios side by side.                                                                                 |
+
+The components live in `src/components/gallery/`; `Gallery.astro` picks one by name.
+
 ### Animated clips
 
 Gallery items can be silent looping videos: put an MP4 in `public/video/<slug>/`, give the item a

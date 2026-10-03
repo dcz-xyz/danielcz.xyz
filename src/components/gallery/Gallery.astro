@@ -1,0 +1,24 @@
+---
+import type { GalleryItem, GalleryLayout } from '../../lib/gallery';
+import Filmstrip from './Filmstrip.astro';
+import Grid from './Grid.astro';
+import Slideshow from './Slideshow.astro';
+import Stack from './Stack.astro';
+
+/** Renders a list of images or clips in one of the layouts from src/lib/gallery.ts. */
+interface Props {
+  layout: GalleryLayout;
+  items: GalleryItem[];
+  /** Unique on the page; used for slide ids. */
+  id: string;
+  label?: string;
+  /** Load the first image eagerly (when the gallery is the page's main image). */
+  priority?: boolean;
+}
+const { layout, items, id, label = 'Gallery', priority = false } = Astro.props;
+---
+
+{layout === 'slideshow' && <Slideshow items={items} id={id} label={label} priority={priority} />}
+{layout === 'grid' && <Grid items={items} label={label} />}
+{layout === 'stack' && <Stack items={items} label={label} />}
+{layout === 'filmstrip' && <Filmstrip items={items} label={label} />}

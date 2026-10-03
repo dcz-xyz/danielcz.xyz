@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { BASE } from './helpers/site';
 
 /**
@@ -12,8 +12,15 @@ const pages: { name: string; path: string }[] = [
   { name: 'project', path: `${BASE}projects/mobiprint/` },
 ];
 
-/** Force lazy images to load and wait for them and the fonts, so captures are deterministic. */
-async function settle(page: import('@playwright/test').Page) {
+/** One capture per gallery layout (1280 px, light) so the options can be compared. */
+const galleryPages: { name: string; path: string }[] = [
+  { name: 'gallery-grid', path: `${BASE}projects/soft-robot-interfaces/` },
+  { name: 'gallery-stack', path: `${BASE}projects/camera-obscura/` },
+  { name: 'gallery-filmstrip', path: `${BASE}projects/moirewidgets/` },
+];
+
+/** Force lazy images to load, reset videos to their posters, wait for fonts: deterministic captures. */
+async function settle(page: Page) {
   await page.evaluate(async () => {
     const images = Array.from(document.images);
     for (const img of images) img.loading = 'eager';
@@ -27,8 +34,16 @@ async function settle(page: import('@playwright/test').Page) {
             }),
       ),
     );
+    // Native video controls draw buffer bars that differ run to run; capture the poster only.
+    for (const v of Array.from(document.querySelectorAll('video'))) {
+      v.removeAttribute('autoplay');
+      v.removeAttribute('controls');
+      v.pause();
+      v.load();
+    }
     await document.fonts.ready;
   });
+  await page.waitForLoadState('networkidle');
 }
 
 for (const p of pages) {
@@ -51,6 +66,19 @@ for (const p of pages) {
     await page.goto(p.path);
     await settle(page);
     await expect(page).toHaveScreenshot(`${p.name}-1280-dark.png`, {
+      fullPage: true,
+      animations: 'disabled',
+    });
+  });
+}
+
+for (const p of galleryPages) {
+  test(`${p.name} @ 1280px (light)`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
+    await page.goto(p.path);
+    await settle(page);
+    await expect(page).toHaveScreenshot(`${p.name}-1280.png`, {
       fullPage: true,
       animations: 'disabled',
     });

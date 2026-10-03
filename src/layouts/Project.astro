@@ -3,6 +3,7 @@ import { getImage } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import Base from './Base.astro';
 import Figure from '../components/Figure.astro';
+import Gallery from '../components/gallery/Gallery.astro';
 import { href } from '../lib/paths';
 import { doiLabel } from '../lib/publications';
 import { TAG_LABELS } from '../lib/tags';
@@ -16,6 +17,11 @@ interface Props {
 }
 const { project, paper, prev, next } = Astro.props;
 const d = project.data;
+
+// Slideshow layouts show the hero as the first slide; the other layouts keep a
+// separate hero on top and show the gallery after the text.
+const layout = d.galleryLayout;
+const slides = layout === 'slideshow' ? [{ src: d.hero, alt: d.heroAlt }, ...d.gallery] : d.gallery;
 
 // Social card: the hero at 1200px wide, as an absolute URL.
 const og = await getImage({ src: d.hero, width: 1200, format: 'jpg' });
@@ -42,20 +48,32 @@ const links = paper
     </header>
 
     <div class="container project__hero rise">
-      <Figure
-        src={d.hero}
-        alt={d.heroAlt}
-        widths={[640, 960, 1280, 1600]}
-        sizes="(min-width: 1216px) 1120px, calc(100vw - 2 * var(--gutter))"
-        priority
-      />
+      {layout === 'slideshow' ? (
+        <Gallery
+          layout="slideshow"
+          items={slides}
+          id="project-gallery"
+          label="Project images"
+          priority
+        />
+      ) : (
+        <Figure
+          src={d.hero}
+          alt={d.heroAlt}
+          widths={[640, 960, 1280, 1600]}
+          sizes="(min-width: 1216px) 1120px, calc(100vw - 2 * var(--gutter))"
+          priority
+        />
+      )}
       {d.video && (
-        <a class="project__watch button" href={d.video}>
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-          Watch the video
-        </a>
+        <p class="project__watch">
+          <a class="button" href={d.video}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            Watch the video
+          </a>
+        </p>
       )}
     </div>
 
@@ -82,7 +100,7 @@ const links = paper
           </div>
         )}
         {links.length > 0 && (
-          <div class="project__meta-links">
+          <div>
             <dt>Links</dt>
             <dd>
               <ul class="project__links" aria-label="Related links">
@@ -104,15 +122,9 @@ const links = paper
       </div>
     </div>
 
-    {d.gallery.length > 0 && (
+    {layout !== 'slideshow' && d.gallery.length > 0 && (
       <section class="container project__gallery" aria-label="Gallery">
-        <ul class="project__gallery-grid">
-          {d.gallery.map((item) => (
-            <li class="rise">
-              <Figure src={item.src} alt={item.alt} caption={item.caption} video={item.video} />
-            </li>
-          ))}
-        </ul>
+        <Gallery layout={layout} items={d.gallery} id="project-gallery" label="Project images" />
       </section>
     )}
 
@@ -160,14 +172,14 @@ const links = paper
   }
 
   .project__hero {
-    position: relative;
     margin-top: var(--space-5);
   }
 
   .project__watch {
-    position: absolute;
-    right: calc(var(--gutter) + var(--space-3));
-    bottom: var(--space-3);
+    margin: var(--space-3) 0 0;
+  }
+
+  .project__watch .button {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -226,14 +238,6 @@ const links = paper
     margin-top: var(--section-pad);
   }
 
-  .project__gallery-grid {
-    display: grid;
-    gap: var(--space-5) var(--space-4);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
   .project__nav {
     display: grid;
     gap: var(--space-3);
@@ -271,9 +275,6 @@ const links = paper
   }
 
   @media (min-width: 640px) {
-    .project__gallery-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
     .project__nav {
       grid-template-columns: 1fr 1fr;
     }

@@ -11,6 +11,7 @@
 import { defineCollection, reference } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
+import { DEFAULT_GALLERY_LAYOUT, GALLERY_LAYOUTS } from './lib/gallery';
 import { DEMOS, PROJECT_TAGS } from './lib/tags';
 
 const nonEmpty = z.string().trim().min(1, 'must not be empty');
@@ -99,6 +100,8 @@ const projects = defineCollection({
               .strict(),
           )
           .default([]),
+        /** How the images are shown; see src/lib/gallery.ts for the options. */
+        galleryLayout: z.enum(GALLERY_LAYOUTS).default(DEFAULT_GALLERY_LAYOUT),
         /** Optional YouTube URL shown in the hero slot. */
         video: httpUrl.optional(),
         /** Position in the Work grid (1 = first). */

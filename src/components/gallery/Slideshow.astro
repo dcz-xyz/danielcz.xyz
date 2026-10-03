@@ -1,0 +1,355 @@
+---
+import { Picture } from 'astro:assets';
+import type { GalleryItem } from '../../lib/gallery';
+import Figure from '../Figure.astro';
+
+/**
+ * One large image at a time, like the old site's carousel: arrows, a thumbnail
+ * strip, keyboard (arrow keys, Home, End) and touch swipe. The stage is a
+ * scroll-snap container, so it also works without JavaScript: swipe or scroll
+ * it, or use the thumbnail links. The script adds arrows, the counter, active
+ * thumbnail state and preloads the neighbouring slides.
+ */
+interface Props {
+  items: GalleryItem[];
+  id: string;
+  label: string;
+  priority?: boolean;
+}
+const { items, id, label, priority = false } = Astro.props;
+const slideId = (i: number) => `${id}-slide-${i + 1}`;
+---
+
+<div
+  class="slideshow"
+  data-slideshow
+  role="region"
+  aria-roledescription="carousel"
+  aria-label={label}
+>
+  <div class="slideshow__viewport">
+    <div
+      class="slideshow__stage"
+      data-slideshow-stage
+      role="group"
+      tabindex="0"
+      aria-label="Images, use the arrow keys to move between them"
+    >
+      {items.map((item, i) => (
+        <div
+          class="slideshow__slide"
+          id={slideId(i)}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${i + 1} of ${items.length}`}
+        >
+          <Figure
+            src={item.src}
+            alt={item.alt}
+            caption={item.caption}
+            video={item.video}
+            widths={[640, 960, 1280, 1600]}
+            sizes="(min-width: 1216px) 1120px, calc(100vw - 2 * var(--gutter))"
+            priority={priority && i === 0}
+          />
+        </div>
+      ))}
+    </div>
+    {items.length > 1 && (
+      <>
+        <button
+          type="button"
+          class="slideshow__arrow slideshow__arrow--prev"
+          data-slideshow-prev
+          aria-label="Previous image"
+          hidden
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="slideshow__arrow slideshow__arrow--next"
+          data-slideshow-next
+          aria-label="Next image"
+          hidden
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z" />
+          </svg>
+        </button>
+      </>
+    )}
+  </div>
+  {items.length > 1 && (
+    <div class="slideshow__footer">
+      <ul class="slideshow__thumbs" aria-label="Choose an image">
+        {items.map((item, i) => (
+          <li>
+            <a
+              class="slideshow__thumb"
+              href={`#${slideId(i)}`}
+              data-slideshow-thumb
+              aria-label={`Image ${i + 1}: ${item.alt}`}
+              aria-current={i === 0 ? 'true' : undefined}
+            >
+              <Picture
+                src={item.src}
+                alt=""
+                width={168}
+                widths={[168, 336]}
+                sizes="84px"
+                formats={['avif']}
+                fallbackFormat="webp"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="slideshow__counter muted small" data-slideshow-counter aria-live="polite" hidden>
+        1 / {items.length}
+      </p>
+    </div>
+  )}
+</div>
+
+<script is:inline>
+  (() => {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for (const root of document.querySelectorAll('[data-slideshow]')) {
+      const stage = root.querySelector('[data-slideshow-stage]');
+      const slides = Array.from(stage.children);
+      if (slides.length < 2) continue;
+      const thumbs = Array.from(root.querySelectorAll('[data-slideshow-thumb]'));
+      const prev = root.querySelector('[data-slideshow-prev]');
+      const next = root.querySelector('[data-slideshow-next]');
+      const counter = root.querySelector('[data-slideshow-counter]');
+      let index = 0;
+
+      const goTo = (i) => {
+        i = Math.max(0, Math.min(slides.length - 1, i));
+        slides[i].scrollIntoView({
+          inline: 'start',
+          block: 'nearest',
+          behavior: reduced ? 'instant' : 'smooth',
+        });
+      };
+
+      const setActive = (i) => {
+        index = i;
+        thumbs.forEach((t, j) =>
+          j === i ? t.setAttribute('aria-current', 'true') : t.removeAttribute('aria-current'),
+        );
+        if (counter) counter.textContent = `${i + 1} / ${slides.length}`;
+        prev.disabled = i === 0;
+        next.disabled = i === slides.length - 1;
+        for (const j of [i - 1, i + 1]) {
+          const img = slides[j] && slides[j].querySelector('img');
+          if (img) img.loading = 'eager';
+        }
+      };
+
+      // The active slide is a pure function of the scroll position, so it is
+      // never ambiguous (e.g. while layout settles and several slides overlap).
+      const current = () => Math.round(stage.scrollLeft / Math.max(1, stage.clientWidth));
+      let frame = 0;
+      const sync = () => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => setActive(current()));
+      };
+      stage.addEventListener('scroll', sync, { passive: true });
+      const io = new IntersectionObserver(sync, { root: stage, threshold: 0.6 });
+      for (const s of slides) io.observe(s);
+
+      thumbs.forEach((t, i) =>
+        t.addEventListener('click', (e) => {
+          e.preventDefault();
+          goTo(i);
+        }),
+      );
+      prev.addEventListener('click', () => goTo(index - 1));
+      next.addEventListener('click', () => goTo(index + 1));
+      stage.addEventListener('keydown', (e) => {
+        const map = {
+          ArrowRight: index + 1,
+          ArrowLeft: index - 1,
+          Home: 0,
+          End: slides.length - 1,
+        };
+        if (e.key in map) {
+          e.preventDefault();
+          goTo(map[e.key]);
+        }
+      });
+
+      prev.hidden = false;
+      next.hidden = false;
+      if (counter) counter.hidden = false;
+      setActive(0);
+    }
+  })();
+</script>
+
+<style>
+  .slideshow__viewport {
+    position: relative;
+  }
+
+  .slideshow__stage {
+    display: flex;
+    aspect-ratio: 16 / 10;
+    max-height: 72vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    border-radius: var(--radius-img);
+    background: var(--surface);
+  }
+
+  .slideshow__stage::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slideshow__stage:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .slideshow__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-margin-top: var(--header-h);
+  }
+
+  .slideshow__slide :global(figure) {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    height: 100%;
+  }
+
+  .slideshow__slide :global(picture) {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .slideshow__slide :global(.figure__media) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .slideshow__slide :global(.figure__caption) {
+    padding: var(--space-2) var(--space-3);
+    text-align: center;
+  }
+
+  .slideshow__arrow {
+    position: absolute;
+    top: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    color: var(--fg);
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition:
+      background var(--dur-fast) var(--ease),
+      opacity var(--dur-fast) var(--ease);
+  }
+
+  .slideshow__arrow svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: currentColor;
+  }
+
+  .slideshow__arrow:hover {
+    background: var(--bg);
+  }
+
+  .slideshow__arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .slideshow__arrow--prev {
+    left: var(--space-3);
+  }
+
+  .slideshow__arrow--next {
+    right: var(--space-3);
+  }
+
+  .slideshow__footer {
+    display: grid;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .slideshow__thumbs {
+    display: flex;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 2px;
+    list-style: none;
+    overflow-x: auto;
+    justify-content: safe center;
+    scrollbar-width: thin;
+  }
+
+  .slideshow__thumb {
+    display: block;
+    width: 84px;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: var(--radius-img);
+    background: var(--surface);
+    opacity: 0.55;
+    transition:
+      opacity var(--dur-fast) var(--ease),
+      box-shadow var(--dur-fast) var(--ease);
+  }
+
+  .slideshow__thumb :global(picture) {
+    height: 100%;
+  }
+
+  .slideshow__thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slideshow__thumb:hover,
+  .slideshow__thumb[aria-current] {
+    opacity: 1;
+  }
+
+  .slideshow__thumb[aria-current] {
+    box-shadow: 0 0 0 2px var(--fg);
+  }
+
+  .slideshow__counter {
+    margin: 0;
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slideshow__stage {
+      scroll-behavior: auto;
+    }
+  }
+</style>

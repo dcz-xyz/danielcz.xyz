@@ -6,6 +6,7 @@ year: 2019
 tags: [research]
 order: 7
 collaborators: [Disney Research]
+galleryLayout: grid # slideshow | grid | stack | filmstrip (see README)
 hero: ../../assets/images/projects/soft-robot-interfaces/hotendandwand.jpg
 heroAlt: TODO alt text (hotendandwand.jpg)
 thumbnail: ../../assets/images/projects/soft-robot-interfaces/img-1361.jpg
