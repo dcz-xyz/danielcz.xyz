@@ -1,0 +1,49 @@
+---
+/**
+ * Hand-drawn wave between home sections, like the old site's section divider.
+ *
+ * How to edit:
+ *   - Shape:    edit src/assets/dividers/wave-1.svg or wave-2.svg (keep the viewBox
+ *               and stroke="currentColor"; any drawing tool's SVG export works).
+ *   - Size:     --divider-height and --divider-stroke in src/styles/tokens.css.
+ *   - Color:    --divider-color in tokens.css (defaults to the text color).
+ *   - Remove:   delete the <SectionDivider /> lines in src/pages/index.astro.
+ *   - Another:  add wave-3.svg, import it below, and extend the `variant` list.
+ */
+import Wave1 from '../assets/dividers/wave-1.svg';
+import Wave2 from '../assets/dividers/wave-2.svg';
+
+interface Props {
+  variant?: 1 | 2;
+  /** Mirror the wave horizontally. */
+  flip?: boolean;
+}
+const { variant = 1, flip = false } = Astro.props;
+const Wave = variant === 2 ? Wave2 : Wave1;
+---
+
+<div class:list={['divider', { 'divider--flip': flip }]} aria-hidden="true">
+  <Wave class="divider__svg" focusable="false" />
+</div>
+
+<style>
+  .divider {
+    height: var(--divider-height);
+    color: var(--divider-color);
+    overflow: hidden;
+  }
+
+  .divider__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .divider__svg :global(path) {
+    stroke-width: var(--divider-stroke);
+  }
+
+  .divider--flip {
+    transform: scaleX(-1);
+  }
+</style>

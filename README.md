@@ -80,6 +80,14 @@ grayscale in both themes; `--accent` is the single token to change if a color is
 Dark mode follows the system preference and can be overridden with the toggle in the footer,
 which stores the choice in `localStorage`.
 
+### Section dividers
+
+The wavy lines between the home sections are two SVG files, `src/assets/dividers/wave-1.svg`
+and `wave-2.svg`, inlined by `src/components/SectionDivider.astro`. Edit the path in either
+file with any drawing tool (keep the `viewBox` and `stroke="currentColor"`), change
+`--divider-height`, `--divider-stroke` or `--divider-color` in `tokens.css`, or remove the
+`<SectionDivider />` lines from `src/pages/index.astro` to go back to plain spacing.
+
 ## Content
 
 All site content lives in `src/content/` and is validated against the schemas in

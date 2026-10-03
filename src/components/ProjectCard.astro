@@ -54,6 +54,11 @@ const tagLine = `${d.tags.map((t) => TAG_LABELS[t]).join(', ')} · ${d.year}`;
     transition: transform var(--dur-fast) var(--ease);
   }
 
+  /* <Picture> wraps the image in <picture>; size it so the image can fill the box. */
+  .project-card__media :global(picture) {
+    height: 100%;
+  }
+
   .project-card__media :global(img) {
     width: 100%;
     height: 100%;

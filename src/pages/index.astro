@@ -3,10 +3,13 @@ import Base from '../layouts/Base.astro';
 import About from '../components/home/About.astro';
 import Publications from '../components/home/Publications.astro';
 import Work from '../components/home/Work.astro';
+import SectionDivider from '../components/SectionDivider.astro';
 ---
 
 <Base>
   <About />
+  <SectionDivider variant={1} />
   <Publications />
+  <SectionDivider variant={2} />
   <Work />
 </Base>

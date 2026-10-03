@@ -77,6 +77,11 @@ const runs = authorRuns(authors, equalContribution);
     border-radius: var(--radius-img);
   }
 
+  /* <Picture> wraps the image in <picture>; size it so the image can fill the box. */
+  .pub__thumb :global(picture) {
+    height: 100%;
+  }
+
   .pub__thumb :global(img) {
     width: 100%;
     height: 100%;

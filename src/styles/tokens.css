@@ -64,6 +64,11 @@
   --radius: 6px;
   --radius-img: 2px;
 
+  /* Wavy section dividers (src/components/SectionDivider.astro). */
+  --divider-height: clamp(36px, 5vw, 72px);
+  --divider-stroke: 3.5px;
+  --divider-color: var(--fg);
+
   /* ----- Motion --------------------------------------------------------- */
   --dur-fast: 150ms;
   --dur: 300ms;

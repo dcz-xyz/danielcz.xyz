@@ -64,6 +64,11 @@ const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subje
     background: var(--surface);
   }
 
+  /* <Picture> wraps the image in <picture>; size it so the image can fill the box. */
+  .about__portrait :global(picture) {
+    height: 100%;
+  }
+
   .about__portrait :global(img) {
     width: 100%;
     height: 100%;
