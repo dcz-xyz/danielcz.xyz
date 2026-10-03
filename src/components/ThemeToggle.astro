@@ -1,0 +1,114 @@
+---
+/**
+ * Light / dark / system switch. Sets `data-theme` on <html> and persists the
+ * choice in localStorage. Hidden until its inline script runs, so visitors
+ * without JavaScript never see dead controls (they simply follow the system).
+ */
+---
+
+<div class="theme-toggle" data-theme-toggle hidden>
+  <span class="theme-toggle__label" id="theme-toggle-label">
+    Theme
+  </span>
+  <div class="theme-toggle__group" role="group" aria-labelledby="theme-toggle-label">
+    <button type="button" data-theme-choice="light" aria-pressed="false">
+      Light
+    </button>
+    <button type="button" data-theme-choice="dark" aria-pressed="false">
+      Dark
+    </button>
+    <button type="button" data-theme-choice="system" aria-pressed="false">
+      System
+    </button>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const wrap = document.querySelector('[data-theme-toggle]');
+    if (!wrap) return;
+    const buttons = Array.from(wrap.querySelectorAll('[data-theme-choice]'));
+
+    const stored = () => {
+      try {
+        const t = localStorage.getItem('theme');
+        return t === 'light' || t === 'dark' ? t : 'system';
+      } catch {
+        return 'system';
+      }
+    };
+
+    const render = (choice) => {
+      for (const b of buttons) {
+        b.setAttribute('aria-pressed', String(b.getAttribute('data-theme-choice') === choice));
+      }
+    };
+
+    const apply = (choice) => {
+      try {
+        if (choice === 'system') {
+          root.removeAttribute('data-theme');
+          localStorage.removeItem('theme');
+        } else {
+          root.setAttribute('data-theme', choice);
+          localStorage.setItem('theme', choice);
+        }
+      } catch {
+        /* storage unavailable: the attribute still applies for this page */
+      }
+      render(choice);
+    };
+
+    for (const b of buttons) {
+      b.addEventListener('click', () => apply(b.getAttribute('data-theme-choice')));
+    }
+
+    render(stored());
+    wrap.hidden = false;
+  })();
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-xs);
+  }
+
+  .theme-toggle__label {
+    color: var(--muted);
+  }
+
+  .theme-toggle__group {
+    display: inline-flex;
+    padding: 2px;
+    border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+    border-radius: 999px;
+  }
+
+  .theme-toggle button {
+    min-height: 1.75rem;
+    padding: 0.2rem 0.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-tight);
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease);
+  }
+
+  .theme-toggle button:hover:not([aria-pressed='true']) {
+    background: color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  .theme-toggle button[aria-pressed='true'] {
+    background: var(--fg);
+    color: var(--bg);
+  }
+</style>

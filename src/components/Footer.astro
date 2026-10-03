@@ -1,0 +1,90 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+// Social links from content-source/about.md.
+const social = [
+  { label: 'X', href: 'https://x.com/Daniel_C_Z', icon: 'x' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/danielcamposzamora/', icon: 'linkedin' },
+] as const;
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p class="site-footer__copy">Copyright © Daniel Campos Zamora</p>
+    <ul class="site-footer__social" aria-label="Social links">
+      {social.map((s) => (
+        <li>
+          <a href={s.href} aria-label={s.label} rel="me noopener">
+            {s.icon === 'x' ? (
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg>
+            )}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <ThemeToggle />
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    /* The band is dark in both themes; re-point the tokens so children adapt. */
+    --bg: var(--band-bg);
+    --fg: var(--band-fg);
+    --muted: var(--band-muted);
+    --accent: var(--band-fg);
+
+    margin-top: auto;
+    padding-block: var(--space-6);
+    background: var(--bg);
+    color: var(--fg);
+    font-size: var(--fs-sm);
+    text-align: center;
+  }
+
+  .site-footer__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+  }
+
+  .site-footer__copy {
+    margin: 0;
+  }
+
+  .site-footer__social {
+    display: flex;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    color: var(--fg);
+    text-decoration: none;
+    transition: background var(--dur-fast) var(--ease);
+  }
+
+  .site-footer__social a:hover {
+    background: color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  .site-footer__social svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: currentColor;
+  }
+</style>

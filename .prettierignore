@@ -1,0 +1,21 @@
+# Build and caches
+dist/
+.astro/
+node_modules/
+package-lock.json
+
+# Source material and local planning files (never reformat Daniel's content)
+content-source/
+reference/
+SPEC.md
+TODO.md
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
+# Test output and binary baselines
+tests/__screenshots__/
+test-results/
+playwright-report/
+.lighthouseci/
+public/pdfs/

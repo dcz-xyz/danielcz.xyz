@@ -1,0 +1,34 @@
+// @ts-check
+import { defineConfig, globalIgnores } from 'eslint/config';
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import astro from 'eslint-plugin-astro';
+import prettier from 'eslint-config-prettier/flat';
+import globals from 'globals';
+
+export default defineConfig([
+  globalIgnores([
+    'dist/',
+    '.astro/',
+    'node_modules/',
+    'content-source/',
+    'reference/',
+    'tests/__screenshots__/',
+    'test-results/',
+    'playwright-report/',
+  ]),
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...astro.configs.recommended,
+  ...astro.configs['jsx-a11y-strict'],
+  {
+    files: ['scripts/**', 'tests/**', '*.config.*'],
+    languageOptions: { globals: { ...globals.node } },
+  },
+  {
+    files: ['src/**/*.ts'],
+    languageOptions: { globals: { ...globals.browser } },
+  },
+  // Keep last so Prettier owns formatting.
+  prettier,
+]);

@@ -1,0 +1,65 @@
+# ---------------------------------------------
+# Private planning files (kept local, never pushed)
+# ---------------------------------------------
+SPEC.md
+TODO.md
+
+# ---------------------------------------------
+# Claude / agent files
+# ---------------------------------------------
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+.mcp.json
+
+# ---------------------------------------------
+# Astro build output and caches
+# ---------------------------------------------
+dist/
+.astro/
+
+# ---------------------------------------------
+# Dependencies
+# ---------------------------------------------
+node_modules/
+
+# ---------------------------------------------
+# Environment and secrets
+# ---------------------------------------------
+.env
+.env.*
+!.env.example
+
+# ---------------------------------------------
+# Test and audit output
+# (visual-regression baselines ARE committed;
+#  only per-run results are ignored)
+# ---------------------------------------------
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.lighthouseci/
+coverage/
+
+# ---------------------------------------------
+# Logs
+# ---------------------------------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------------------------------------------
+# OS and editor clutter
+# ---------------------------------------------
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+# ---------------------------------------------
+# Local reference material (screenshots, Squarespace export)
+# ---------------------------------------------
+reference/
