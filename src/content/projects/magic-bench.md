@@ -17,11 +17,9 @@ gallery:
     alt: TODO alt text (screen-shot-2018-02-14-at-9-50-23-pm.png)
   - src: ../../assets/images/projects/magic-bench/screen-shot-2018-02-14-at-9-51-33-pm.png
     alt: TODO alt text (screen-shot-2018-02-14-at-9-51-33-pm.png)
-  - src: ../../assets/images/projects/magic-bench/mb-haptics-clip-03.png
+  - src: ../../assets/images/projects/magic-bench/mb-haptics-clip-03.gif
 
-    video: /video/magic-bench/mb-haptics-clip-03.mp4
-
-    alt: TODO alt text (mb-haptics-clip-03.gif, shown as video)
+    alt: TODO alt text (mb-haptics-clip-03.gif)
 legacyPaths: [/magic-bench]
 ---
 

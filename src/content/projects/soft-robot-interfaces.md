@@ -11,32 +11,24 @@ heroAlt: TODO alt text (hotendandwand.jpg)
 thumbnail: ../../assets/images/projects/soft-robot-interfaces/img-1361.jpg
 thumbnailAlt: TODO alt text (img-1361.jpg)
 gallery:
-  - src: ../../assets/images/projects/soft-robot-interfaces/robot-sense-zoomed-1.png
+  - src: ../../assets/images/projects/soft-robot-interfaces/robot-sense-zoomed-1.gif
 
-    video: /video/soft-robot-interfaces/robot-sense-zoomed-1.mp4
+    alt: TODO alt text (robot-sense-zoomed-1.gif)
+  - src: ../../assets/images/projects/soft-robot-interfaces/heat-seal-process-gif-1.gif
 
-    alt: TODO alt text (robot-sense-zoomed-1.gif, shown as video)
-  - src: ../../assets/images/projects/soft-robot-interfaces/heat-seal-process-gif-1.png
+    alt: TODO alt text (heat-seal-process-gif-1.gif)
+  - src: ../../assets/images/projects/soft-robot-interfaces/inflate-source-05.gif
 
-    video: /video/soft-robot-interfaces/heat-seal-process-gif-1.mp4
-
-    alt: TODO alt text (heat-seal-process-gif-1.gif, shown as video)
-  - src: ../../assets/images/projects/soft-robot-interfaces/inflate-source-05.png
-
-    video: /video/soft-robot-interfaces/inflate-source-05.mp4
-
-    alt: TODO alt text (inflate-source-05.gif, shown as video)
+    alt: TODO alt text (inflate-source-05.gif)
   - src: ../../assets/images/projects/soft-robot-interfaces/heatsealtableiso.jpg
     alt: TODO alt text (heatsealtableiso.jpg)
   - src: ../../assets/images/projects/soft-robot-interfaces/img-1361.jpg
     alt: TODO alt text (img-1361.jpg)
   - src: ../../assets/images/projects/soft-robot-interfaces/img-1364.jpg
     alt: TODO alt text (img-1364.jpg)
-  - src: ../../assets/images/projects/soft-robot-interfaces/robot-sense.png
+  - src: ../../assets/images/projects/soft-robot-interfaces/robot-sense.gif
 
-    video: /video/soft-robot-interfaces/robot-sense.mp4
-
-    alt: TODO alt text (robot-sense.gif, shown as video)
+    alt: TODO alt text (robot-sense.gif)
 links:
   paper: airbag
 legacyPaths: [/soft-pneumatic-interfaces]

@@ -8,8 +8,9 @@ venue: ACM UIST 2024
 venueFull: In Proceedings of the 37th Annual ACM Symposium on User Interface Software and Technology (UIST ‘24). Association for Computing Machinery, New York, NY, USA, Article 38, 1–10
 year: 2024
 date: 2024-10-11
-thumbnail: ../../assets/images/pubs/mobiprint.jpg
-thumbnailAlt: Image of a 3D printed mounted onto a roomba against a white background.
+# Figure thumbnail from the old site: mobiprint.jpg; its alt text: Image of a 3D printed mounted onto a roomba against a white background.
+thumbnail: ../../assets/images/pubs/mobiprint-page1.png
+thumbnailAlt: First page of the paper
 links:
   pdf: /pdfs/mobiprint-uist2024.pdf
   doi: https://doi.org/10.1145/3654777.3676459

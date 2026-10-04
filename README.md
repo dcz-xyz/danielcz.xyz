@@ -56,6 +56,7 @@ npm run shots:update
 .github/workflows/deploy.yml   build, run gates, deploy to GitHub Pages
 public/pdfs/                   self-hosted paper PDFs, linked from publications
 scripts/js-budget.mjs          JS budget gate
+scripts/pdf-thumbnails.mjs     renders page 1 of each paper PDF as its thumbnail
 scripts/serve-dist.mjs         static server for the Playwright tests (mimics GitHub Pages)
 src/
   assets/images/              portrait, pubs/<key>.*, projects/<slug>/*
@@ -108,9 +109,11 @@ read by the site, so edit `src/content/`.
 
 ### Add a paper
 
-1. Put the thumbnail in `src/assets/images/pubs/<key>.<jpg|png|webp>` and the PDF in
-   `public/pdfs/<key>-<venue><year>.pdf` (for example `mobiprint-uist2024.pdf`).
-2. Create `src/content/publications/<key>.yaml`:
+1. Put the PDF in `public/pdfs/<key>-<venue><year>.pdf` (for example `mobiprint-uist2024.pdf`).
+2. Create `src/content/publications/<key>.yaml` (below), then run `npm run pdf-thumbs`, which
+   renders page 1 of the PDF to `src/assets/images/pubs/<key>-page1.png` with poppler's
+   `pdftoppm` (`brew install poppler`). That image is the clickable thumbnail in the list, as on
+   the Makeability Lab publications page. Any other image works too; point `thumbnail` at it.
 
 ```yaml
 title: 'MobiPrint: A Mobile 3D Printer for Environment-Scale Design and Fabrication'
@@ -123,8 +126,8 @@ venue: ACM UIST 2024 # short tag shown on the card
 venueFull: In Proceedings of the 37th Annual ACM Symposium on User Interface Software and Technology (UIST '24)
 year: 2024
 date: 2024-10-11 # drives newest-first ordering; the DOI record has it
-thumbnail: ../../assets/images/pubs/mobiprint.jpg
-thumbnailAlt: MobiPrint, a 3D printer mounted on a robot vacuum, on a white background
+thumbnail: ../../assets/images/pubs/mobiprint-page1.png # from `npm run pdf-thumbs`
+thumbnailAlt: First page of the paper
 links:
   pdf: /pdfs/mobiprint-uist2024.pdf # optional
   doi: https://doi.org/10.1145/3654777.3676459 # optional
@@ -194,14 +197,13 @@ another demo: add its name to `DEMOS` in `src/lib/tags.ts`, write the element in
 `src/components/demos/`, and add a block for it in `src/components/Demo.astro`. The JS budget
 allows up to 60 KB gzipped on a demo page, lazy chunks included.
 
-### Animated clips
+### Animated GIFs and clips
 
-Gallery items can be silent looping videos: put an MP4 in `public/video/<slug>/`, give the item a
-still frame as `src` (used as the poster and for the social card), and add
-`video: /video/<slug>/<file>.mp4`. The seven animated GIFs from the old site were converted this
-way with ffmpeg (`-c:v libx264 -crf 26 -pix_fmt yuv420p -an`), shrinking them from up to 18 MB to
-under 350 KB each; the originals stay in `content-source/`. Videos pause automatically for
-visitors who prefer reduced motion and always have controls.
+Animated GIFs in a gallery are served exactly as uploaded (the image optimizer would freeze
+them), so keep them as small as you can. A gallery item can alternatively be a silent looping
+video: put an MP4 in `public/video/<slug>/`, give the item a still frame as `src` (the poster)
+and add `video: /video/<slug>/<file>.mp4`; `ffmpeg -i in.gif -c:v libx264 -crf 26 -pix_fmt yuv420p -an out.mp4`
+makes one. Videos pause for visitors who prefer reduced motion and always have controls.
 
 ### YouTube videos
 

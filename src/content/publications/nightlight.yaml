@@ -12,8 +12,9 @@ venue: ACM CHI 2025
 venueFull: In Proceedings of the 43rd Annual ACM Conference on Human Factor in Computing Systems (CHI ’25). Yokohama, Japan
 year: 2025
 date: 2025-04-25
-thumbnail: ../../assets/images/pubs/nightlight.png
-thumbnailAlt: Illustration of a person walking on a sidewalk at night with their phone oriented upwards to capture the ambient light.
+# Figure thumbnail from the old site: nightlight.png; its alt text: Illustration of a person walking on a sidewalk at night with their phone oriented upwards to capture the ambient light.
+thumbnail: ../../assets/images/pubs/nightlight-page1.png
+thumbnailAlt: First page of the paper
 links:
   pdf: /pdfs/nightlight-chi2025.pdf
   doi: https://doi.org/10.1145/3706598.3714299

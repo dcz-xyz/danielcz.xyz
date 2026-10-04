@@ -10,8 +10,9 @@ venue: IEEE Humanoids 2024
 venueFull: 2024 IEEE-RAS 23rd International Conference on Humanoid Robots (Humanoids), Nancy, France.
 year: 2024
 date: 2024-11-22
-thumbnail: ../../assets/images/pubs/hybridleg.jpeg
-thumbnailAlt: Photo of two-legged robot standing on flat surface with white background.
+# Figure thumbnail from the old site: hybridleg.jpeg; its alt text: Photo of two-legged robot standing on flat surface with white background.
+thumbnail: ../../assets/images/pubs/hybridleg-page1.png
+thumbnailAlt: First page of the paper
 links:
   pdf: /pdfs/hybridleg-humanoids2024.pdf
   doi: https://doi.org/10.1109/Humanoids58906.2024.10769967

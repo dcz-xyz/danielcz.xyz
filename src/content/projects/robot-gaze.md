@@ -11,11 +11,9 @@ heroAlt: TODO alt text (interactive-gaze-01.webp)
 gallery:
   - src: ../../assets/images/projects/robot-gaze/interactive-gaze-02.jpg
     alt: TODO alt text (interactive-gaze-02.jpg)
-  - src: ../../assets/images/projects/robot-gaze/realistic-and-interactive-robot-gaze.png
+  - src: ../../assets/images/projects/robot-gaze/realistic-and-interactive-robot-gaze.gif
 
-    video: /video/robot-gaze/realistic-and-interactive-robot-gaze.mp4
-
-    alt: TODO alt text (realistic-and-interactive-robot-gaze.gif, shown as video)
+    alt: TODO alt text (realistic-and-interactive-robot-gaze.gif)
 # The old page embedded this video in place of an image gallery.
 video: https://www.youtube.com/watch?v=D8_VmWWRJgE
 links:

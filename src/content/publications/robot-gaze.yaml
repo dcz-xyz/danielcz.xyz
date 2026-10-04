@@ -14,8 +14,9 @@ venue: IEEE IROS 2020
 venueFull: In 2020 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), IEEE, Las Vegas, NV, USA, 11072–11078.
 year: 2020
 date: 2020-10-24
-thumbnail: ../../assets/images/pubs/robot-gaze.jpeg
-thumbnailAlt: Over-the-shoulder photo of mechanical robot head looking toward a person standing across them.
+# Figure thumbnail from the old site: robot-gaze.jpeg; its alt text: Over-the-shoulder photo of mechanical robot head looking toward a person standing across them.
+thumbnail: ../../assets/images/pubs/robot-gaze-page1.png
+thumbnailAlt: First page of the paper
 links:
   pdf: /pdfs/robot-gaze-iros2020.pdf
   doi: https://doi.org/10.1109/IROS45743.2020.9341297

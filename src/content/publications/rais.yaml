@@ -8,8 +8,9 @@ venue: ACM ASSETS 2024
 venueFull: In Proceedings of the 26th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '24). Association for Computing Machinery, New York, NY, USA, Article 86, 1–5.
 year: 2024
 date: 2024-10-27
-thumbnail: ../../assets/images/pubs/rais.jpeg
-thumbnailAlt: Three-part diagram with a robot with a camera on tripod, then a zoomed screenshot of the phone, and on the right, a 3D rendered map.
+# Figure thumbnail from the old site: rais.jpeg; its alt text: Three-part diagram with a robot with a camera on tripod, then a zoomed screenshot of the phone, and on the right, a 3D rendered map.
+thumbnail: ../../assets/images/pubs/rais-page1.png
+thumbnailAlt: First page of the paper
 links:
   pdf: /pdfs/rais-assets2024.pdf
   doi: https://doi.org/10.1145/3663548.3688512

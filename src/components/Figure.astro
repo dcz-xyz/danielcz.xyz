@@ -5,7 +5,8 @@ import { href } from '../lib/paths';
 
 /**
  * Image (or silent looping video with a poster) with an optional caption.
- * Used for project heroes and gallery items.
+ * Used for project heroes and gallery items. Animated GIFs are served as-is,
+ * because the image optimizer would freeze them.
  */
 interface Props {
   src: ImageMetadata;
@@ -31,6 +32,7 @@ const {
 } = Astro.props;
 
 const poster = video ? await getImage({ src, width: 1200, format: 'webp' }) : null;
+const isGif = src.format === 'gif';
 ---
 
 <figure class:list={['figure', className]}>
@@ -50,6 +52,16 @@ const poster = video ? await getImage({ src, width: 1200, format: 'webp' }) : nu
     >
       <source src={href(video)} type="video/mp4" />
     </video>
+  ) : isGif ? (
+    <img
+      class="figure__media"
+      src={src.src}
+      width={src.width}
+      height={src.height}
+      alt={alt}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding="async"
+    />
   ) : (
     <Picture
       class="figure__media"
