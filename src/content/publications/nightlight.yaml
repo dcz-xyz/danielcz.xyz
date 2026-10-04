@@ -13,7 +13,7 @@ venueFull: In Proceedings of the 43rd Annual ACM Conference on Human Factor in C
 year: 2025
 date: 2025-04-25
 thumbnail: ../../assets/images/pubs/nightlight.png
-thumbnailAlt: TODO alt text (nightlight.png)
+thumbnailAlt: Illustration of a person walking on a sidewalk at night with their phone oriented upwards to capture the ambient light.
 links:
   pdf: /pdfs/nightlight-chi2025.pdf
   doi: https://doi.org/10.1145/3706598.3714299

@@ -71,7 +71,7 @@ Video URL:
 Thumbnail Alt-text: [todo]
 
 
-Title: RAIS: Towards A Robotic Mapping and Assessment Tool for Indoor Accessibility Using Commodity Hardware.
+Title: RAIS: Towards A Robotic Mapping and Assessment Tool for Indoor Accessibility Using Commodity Hardware
 Authors: Xia Su, Daniel Campos Zamora, and Jon E. Froehlich.
 Venue: In Proceedings of the 26th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '24). Association for Computing Machinery, New York, NY, USA, Article 86, 1–5.
 Year: 2024

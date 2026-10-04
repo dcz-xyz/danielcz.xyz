@@ -8,9 +8,9 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 
 <section id="projects" class="section" aria-labelledby="projects-heading">
   <div class="container">
-    <div class="work__head">
+    <div class="projects__head">
       <h2 id="projects-heading" class="rise">
-        Work
+        Projects
       </h2>
       <FilterBar gridId="project-grid" total={projects.length} />
     </div>
@@ -23,7 +23,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 </section>
 
 <style>
-  .work__head {
+  .projects__head {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -32,7 +32,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
     margin-bottom: var(--space-5);
   }
 
-  .work__head h2 {
+  .projects__head h2 {
     margin: 0;
   }
 

@@ -65,7 +65,7 @@ src/
   components/                  Header, Footer, ThemeToggle (+ cards and figures from Phase 2)
   layouts/Base.astro           <head>, skip link, header, main, footer
   lib/paths.ts                 href() helper so links work at "/" and "/danielcz.xyz/"
-  components/home/             About, Publications, Work sections of the home page
+  components/home/             About, Publications, Projects sections of the home page
   components/Demo.astro        mounts an interactive island by name
   components/demos/            island code (MoireExplorer.ts)
   components/Figure.astro      image or looping video with caption
@@ -146,7 +146,7 @@ title: MobiPrint
 subtitle: A pipeline for in-situ design and fabrication to adapt physical environments.
 year: 2024 # or a range as a string, e.g. "2011-2015"
 tags: [research] # research | not-research
-order: 3 # position in the Work grid, 1 = first
+order: 3 # position in the Projects grid, 1 = first
 collaborators: [Jon E. Froehlich, Liang He]
 hero: ../../assets/images/projects/mobiprint/img-8880.jpg
 heroAlt: The MobiPrint robot on a white background

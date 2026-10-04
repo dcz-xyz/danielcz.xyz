@@ -191,6 +191,40 @@ a:hover {
   border: 0;
 }
 
+/* ----- View transitions (Projects filter) ------------------------------- */
+/* Each project card carries its own view-transition-name, so filtering slides
+   the remaining cards into place while hidden ones fade and shrink away. */
+::view-transition-group(*) {
+  animation-duration: 380ms;
+  animation-timing-function: var(--ease);
+}
+
+::view-transition-old(*):only-child {
+  animation: vt-leave 220ms var(--ease) both;
+}
+
+::view-transition-new(*):only-child {
+  animation: vt-enter 320ms var(--ease) both;
+}
+
+@keyframes vt-leave {
+  to {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes vt-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+.site-footer {
+  view-transition-name: site-footer;
+}
+
 /* ----- Motion ----------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html {

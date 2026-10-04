@@ -70,11 +70,12 @@ const runs = authorRuns(authors, equalContribution);
     align-items: start;
   }
 
-  /* Figures come in many aspect ratios; show them whole inside a 16:10 slot. */
+  /* Figures come in many aspect ratios; show them whole, centred in a rounded 16:10 tile. */
   .pub__thumb {
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    border-radius: var(--radius-img);
+    border-radius: var(--radius-thumb);
+    background: var(--surface);
   }
 
   /* <Picture> wraps the image in <picture>; size it so the image can fill the box. */

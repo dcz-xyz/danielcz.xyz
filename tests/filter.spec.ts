@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { BASE } from './helpers/site';
 
-test('work filter shows only matching projects and announces the count', async ({ page }) => {
+test('projects filter shows only matching projects and announces the count', async ({ page }) => {
   await page.goto(BASE);
   const group = page.getByRole('group', { name: 'Filter projects' });
   await expect(group).toBeVisible();
@@ -26,10 +26,10 @@ test('work filter shows only matching projects and announces the count', async (
   await expect(status).toHaveText(`Showing ${research} of ${total} projects`);
 
   await button('Not Research').click();
-  expect(await visible.count()).toBe(total - research);
+  await expect(visible).toHaveCount(total - research);
 
   await button('All').click();
-  expect(await visible.count()).toBe(total);
+  await expect(visible).toHaveCount(total);
   await expect(status).toHaveText(`Showing all ${total} projects`);
 });
 
@@ -49,7 +49,10 @@ test('nav highlights the section in view', async ({ page }) => {
     'location',
   );
   await scrollTo(page, 'projects');
-  await expect(nav.getByRole('link', { name: 'Work' })).toHaveAttribute('aria-current', 'location');
+  await expect(nav.getByRole('link', { name: 'Projects' })).toHaveAttribute(
+    'aria-current',
+    'location',
+  );
   await scrollTo(page, 'about');
   await expect(nav.getByRole('link', { name: 'About' })).toHaveAttribute(
     'aria-current',

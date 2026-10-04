@@ -2,9 +2,10 @@
 import { PROJECT_TAGS, TAG_LABELS } from '../lib/tags';
 
 /**
- * Filter buttons for the Work grid. The grid gets `data-filter="<tag>"` and
+ * Filter buttons for the Projects grid. The grid gets `data-filter="<tag>"` and
  * CSS hides cards whose `data-tags` does not contain it, so the mechanism is
- * pure CSS; the inline script only toggles the attribute and aria-pressed.
+ * pure CSS; the inline script only toggles the attribute and aria-pressed, and
+ * wraps the change in a view transition so cards animate into place.
  * Without JavaScript the bar stays hidden and every project shows.
  */
 interface Props {
@@ -73,8 +74,18 @@ const rules = PROJECT_TAGS.map(
         }
       };
 
+      // Animate the reflow with a view transition where supported and motion is welcome.
+      const animate = (update) => {
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduced && typeof document.startViewTransition === 'function') {
+          document.startViewTransition(update);
+        } else {
+          update();
+        }
+      };
+
       for (const b of buttons) {
-        b.addEventListener('click', () => apply(b.getAttribute('data-filter')));
+        b.addEventListener('click', () => animate(() => apply(b.getAttribute('data-filter'))));
       }
       bar.hidden = false;
     };

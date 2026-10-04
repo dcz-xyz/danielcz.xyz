@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" vector-effect="non-scaling-stroke">
-  <!-- Divider between About and Publications. Edit the path freely; keep the viewBox. -->
-  <path d="M0 48 C 320 6, 560 6, 720 44 C 880 82, 1180 82, 1440 40" vector-effect="non-scaling-stroke" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+  <!-- Divider between About and Publications: a long gentle wave, crest on the
+       left, trough on the right (traced from the old site). Keep the viewBox. -->
+  <path d="M0 38 C 240 10, 480 10, 720 40 C 960 70, 1200 70, 1440 36" vector-effect="non-scaling-stroke" />
 </svg>

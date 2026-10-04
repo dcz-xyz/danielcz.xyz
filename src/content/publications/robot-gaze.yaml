@@ -15,7 +15,7 @@ venueFull: In 2020 IEEE/RSJ International Conference on Intelligent Robots and S
 year: 2020
 date: 2020-10-24
 thumbnail: ../../assets/images/pubs/robot-gaze.jpeg
-thumbnailAlt: TODO alt text (robot-gaze.jpeg)
+thumbnailAlt: Over-the-shoulder photo of mechanical robot head looking toward a person standing across them.
 links:
   pdf: /pdfs/robot-gaze-iros2020.pdf
   doi: https://doi.org/10.1109/IROS45743.2020.9341297

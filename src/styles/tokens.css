@@ -62,16 +62,19 @@
   --space-6: 3rem;
 
   --radius: 6px;
-  --radius-img: 2px;
+  --radius-img: 2px; /* figures on project pages */
+  --radius-thumb: 10px; /* project cards and publication thumbnails */
 
   /* Wavy section dividers (src/components/SectionDivider.astro). */
   --divider-height: clamp(36px, 5vw, 72px);
-  --divider-stroke: 3.5px;
+  --divider-stroke: 3px;
   --divider-color: var(--fg);
 
   /* ----- Motion --------------------------------------------------------- */
   --dur-fast: 150ms;
   --dur: 300ms;
+  --dur-zoom: 400ms; /* image zoom on project cards */
+  --zoom: 1.06;
   --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
   --rise: 12px;
 }

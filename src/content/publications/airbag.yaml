@@ -10,7 +10,7 @@ venueFull: In 2019 2nd IEEE International Conference on Soft Robotics (RoboSoft)
 year: 2019
 date: 2019-04-01
 thumbnail: ../../assets/images/pubs/airbag.png
-thumbnailAlt: TODO alt text (airbag.png)
+thumbnailAlt: A photo of an inflate heat-sealed airbag wrapped around a rigid robot arm. 
 links:
   pdf: /pdfs/airbag-robosoft2019.pdf
   doi: https://doi.org/10.1109/ROBOSOFT.2019.8722726
