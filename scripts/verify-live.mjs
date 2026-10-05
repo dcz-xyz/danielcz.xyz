@@ -29,7 +29,8 @@ const ok = (cond, msg) => {
 const get = async (path, { redirect = 'follow' } = {}) => {
   const url = new URL(path.replace(/^\//, ''), BASE).href;
   const res = await fetch(url, { redirect, headers: { 'user-agent': 'danielcz-verify' } });
-  const text = res.headers.get('content-type')?.includes('text') ? await res.text() : '';
+  const type = res.headers.get('content-type') ?? '';
+  const text = /text|xml|json/.test(type) ? await res.text() : '';
   return {
     url,
     status: res.status,
