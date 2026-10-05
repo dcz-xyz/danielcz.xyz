@@ -266,6 +266,16 @@ To rehearse a staging build locally:
 SITE_URL=https://dcz-xyz.github.io BASE_PATH=/danielcz.xyz/ npm run check
 ```
 
+## Verify a deployment
+
+```sh
+npm run verify-live -- https://dcz-xyz.github.io/danielcz.xyz/      # staging
+npm run verify-live -- https://danielcz.xyz/ --production            # after the cutover
+```
+
+Fetches every page, legacy redirect, PDF and icon from the live site and checks `robots.txt`,
+the `noindex` meta and the sitemap for the environment.
+
 ## Launch (DNS cutover)
 
 Before cutting over: the staging site at `https://dcz-xyz.github.io/danielcz.xyz/` has been

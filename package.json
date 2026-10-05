@@ -25,7 +25,8 @@
     "lighthouse": "lhci autorun --config=lighthouserc.cjs && lhci autorun --config=lighthouserc.dark.cjs && node scripts/lighthouse-report.mjs",
     "pdf-thumbs": "node scripts/pdf-thumbnails.mjs",
     "icons": "node scripts/icons.mjs",
-    "launch-check": "npm run check && node scripts/content-report.mjs --strict && SITE_URL=https://dcz-xyz.github.io BASE_PATH=/danielcz.xyz/ npm run build && node scripts/staging-smoke.mjs && npm run build"
+    "launch-check": "npm run check && node scripts/content-report.mjs --strict && SITE_URL=https://dcz-xyz.github.io BASE_PATH=/danielcz.xyz/ npm run build && node scripts/staging-smoke.mjs && npm run build",
+    "verify-live": "node scripts/verify-live.mjs"
   },
   "dependencies": {
     "@fontsource/poppins": "^5.3.0",
