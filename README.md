@@ -95,6 +95,12 @@ file with any drawing tool (keep the `viewBox` and `stroke="currentColor"`), cha
 `--divider-height`, `--divider-stroke` or `--divider-color` in `tokens.css`, or remove the
 `<SectionDivider />` lines from `src/pages/index.astro` to go back to plain spacing.
 
+### CV
+
+The CV link in the header and the "CV" button in About both point at `CV_PATH` in
+`src/lib/site.ts` (currently `public/pdfs/danielcz-cv-2026.pdf`). To update the CV, add the new
+PDF to `public/pdfs/` and change that one path; the link checker fails if it does not exist.
+
 ## Content
 
 All site content lives in `src/content/` and is validated against the schemas in

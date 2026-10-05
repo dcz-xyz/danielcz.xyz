@@ -2,6 +2,8 @@
 import { Picture } from 'astro:assets';
 import portrait from '../../assets/images/portrait.jpg';
 import SocialLinks from '../SocialLinks.astro';
+import { href } from '../../lib/paths';
+import { CV_PATH } from '../../lib/site';
 
 // Copy and links are verbatim from content-source/about.md.
 const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subject=Hello!%20';
@@ -40,9 +42,12 @@ const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subje
         </p>
       </div>
       <SocialLinks variant="solid" class="about__social" />
-      <p class="about__contact">
+      <p class="about__actions">
         <a class="button" href={contact}>
           Contact
+        </a>
+        <a class="button button--secondary" href={href(CV_PATH)}>
+          CV
         </a>
       </p>
     </div>
@@ -84,7 +89,10 @@ const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subje
     margin-top: var(--space-4);
   }
 
-  .about__contact {
+  .about__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
     margin: var(--space-4) 0 0;
   }
 

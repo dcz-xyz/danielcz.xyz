@@ -264,6 +264,20 @@ a:hover {
   text-decoration: none;
 }
 
+/* Secondary button from reference/styles.md: transparent with a 2px outline, no transform. */
+.button--secondary {
+  padding: calc(0.8em - 1px) calc(1.6em - 1px);
+  border: 2px solid var(--fg);
+  background: transparent;
+  color: var(--fg);
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.button--secondary:hover {
+  background: var(--surface);
+}
+
 .pill {
   display: inline-block;
   padding: 0.3em 0.85em;
