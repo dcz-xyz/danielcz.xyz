@@ -1,5 +1,6 @@
 // @ts-check
 import { readdirSync, readFileSync } from 'node:fs';
+import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import { parse } from 'yaml';
 
@@ -35,13 +36,28 @@ function legacyRedirects() {
   return redirects;
 }
 
+const redirects = legacyRedirects();
+// Pathnames of the generated redirect stubs, e.g. "/danielcz.xyz/key-1/".
+const legacyPathnames = new Set(
+  Object.keys(redirects).map((from) => `${base.replace(/\/$/, '')}${from}/`),
+);
+
 // https://astro.build/config
 export default defineConfig({
   site,
   base,
   // GitHub Pages serves /dir/index.html at /dir/ and 301s /dir -> /dir/.
   trailingSlash: 'always',
-  redirects: legacyRedirects(),
+  redirects,
+  integrations: [
+    sitemap({
+      // Real pages only: no redirect stubs, no 404.
+      filter: (page) => {
+        const { pathname } = new URL(page);
+        return !pathname.endsWith('/404/') && !legacyPathnames.has(pathname);
+      },
+    }),
+  ],
   // Astro 7 defaults to JSX whitespace rules, which drop the space between a line
   // break and an inline element ("of the\n<a>" -> "of the<a>"). Lossless mode keeps it.
   compressHTML: true,

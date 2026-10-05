@@ -13,6 +13,7 @@ import portrait from '../assets/images/portrait.jpg';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { href, basePath } from '../lib/paths';
+import { GOATCOUNTER_CODE } from '../lib/site';
 
 interface Props {
   /** Page title; omitted on the home page so the tab reads just the site name. */
@@ -44,6 +45,13 @@ const canonical = Astro.site ? new URL(canonicalPath, Astro.site).href : undefin
 
 // Keep the staging site (GitHub Pages at github.io) out of search engines.
 const isStaging = Astro.site?.hostname.endsWith('github.io') ?? false;
+const isProduction = Astro.site?.hostname === 'danielcz.xyz';
+
+// Privacy-respecting page counter: a 1 px image, production only (see src/lib/site.ts).
+const counter =
+  isProduction && GOATCOUNTER_CODE
+    ? `https://${GOATCOUNTER_CODE}.goatcounter.com/count?p=${encodeURIComponent(path)}&t=${encodeURIComponent(pageTitle)}`
+    : undefined;
 ---
 
 <!doctype html>
@@ -69,6 +77,11 @@ const isStaging = Astro.site?.hostname.endsWith('github.io') ?? false;
     {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href={href('/favicon.svg')} />
     <link rel="icon" href={href('/favicon.ico')} sizes="32x32" />
+    <link rel="apple-touch-icon" href={href('/apple-touch-icon.png')} />
+    <link rel="manifest" href={href('/site.webmanifest')} />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141414" />
+    <link rel="sitemap" href={href('/sitemap-index.xml')} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:title" content={pageTitle} />
@@ -89,5 +102,17 @@ const isStaging = Astro.site?.hostname.endsWith('github.io') ?? false;
       <slot />
     </main>
     <Footer />
+    {counter && (
+      <img
+        class="visually-hidden"
+        src={counter}
+        alt=""
+        width="1"
+        height="1"
+        loading="eager"
+        decoding="async"
+        aria-hidden="true"
+      />
+    )}
   </body>
 </html>

@@ -26,23 +26,27 @@ One command runs every gate; run it before every commit and paste the output in 
 npm run check
 ```
 
-| Step          | Command                | What it verifies                                                                                                                                                                               |
-| ------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                                                                                                      |
-| Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                                                                                                                 |
-| Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                                                                                                                 |
-| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build.                                                                                    |
-| Build         | `npm run build`        | `astro build` exits 0.                                                                                                                                                                         |
-| JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                                                                                                   |
-| Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                                                                                                         |
-| Theme         | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                                                                                                                       |
-| Links         | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).                                                                                                          |
-| Redirects     | `npm run test:e2e`     | Every `legacyPaths` entry lands on its project page with a 200.                                                                                                                                |
-| Screenshots   | `npm run test:e2e`     | Home and the MobiPrint project page at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.                                                                          |
-| Lighthouse    | `npm run lighthouse`   | Lighthouse CI (mobile) on the home page, `/projects/mobiprint/` and `/projects/moirewidgets/`: Performance, Accessibility, Best Practices, SEO all at least 95. Needs Google Chrome installed. |
+| Step          | Command                | What it verifies                                                                                                                                                                                                                                                                                                                                            |
+| ------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                                                                                                                                                                                                                                                                   |
+| Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                                                                                                                                                                                                                                                                              |
+| Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                                                                                                                                                                                                                                                                              |
+| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build.                                                                                                                                                                                                                                                 |
+| Build         | `npm run build`        | `astro build` exits 0.                                                                                                                                                                                                                                                                                                                                      |
+| JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                                                                                                                                                                                                                                                                |
+| Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                                                                                                                                                                                                                                                                      |
+| Theme         | `npm run test:e2e`     | Light / dark / system toggle changes colors and persists across reloads.                                                                                                                                                                                                                                                                                    |
+| Links         | `npm run test:e2e`     | linkinator crawl: no broken internal links (external failures are listed, not fatal).                                                                                                                                                                                                                                                                       |
+| Redirects     | `npm run test:e2e`     | Every `legacyPaths` entry lands on its project page with a 200.                                                                                                                                                                                                                                                                                             |
+| Screenshots   | `npm run test:e2e`     | Home and the MobiPrint project page at 375, 900, and 1280 px (plus 1280 dark) compared with `tests/__screenshots__/`.                                                                                                                                                                                                                                       |
+| Lighthouse    | `npm run lighthouse`   | Lighthouse CI (mobile) on the home page, `/projects/mobiprint/` and `/projects/moirewidgets/`, in light mode and with Chrome forced to dark mode: Performance, Accessibility, Best Practices, SEO all at least 95, under 300 KB transferred, scripts under 60 KB. The dark run is verified by sampling its final screenshot. Needs Google Chrome installed. |
 
 `npm run check:ci` is the subset that runs in GitHub Actions before every deploy (everything
 except the Playwright suite, whose screenshot baselines are macOS renders, and Lighthouse).
+
+`npm run launch-check` is the launch gate: everything in `check`, plus the strict content report
+(no placeholder alt text anywhere) and a staging-configured build checked for base-aware links,
+redirects, `noindex` and `robots.txt`. It must pass before the DNS cutover.
 
 After an intentional visual change, regenerate the baselines and commit them:
 
@@ -57,6 +61,9 @@ npm run shots:update
 public/pdfs/                   self-hosted paper PDFs, linked from publications
 scripts/js-budget.mjs          JS budget gate
 scripts/pdf-thumbnails.mjs     renders page 1 of each paper PDF as its thumbnail
+scripts/icons.mjs              favicon and app-icon set from one mark
+scripts/lighthouse-report.mjs  score table; verifies the dark-mode run rendered dark
+scripts/staging-smoke.mjs      checks a staging-configured build (base-aware links, redirects)
 scripts/serve-dist.mjs         static server for the Playwright tests (mimics GitHub Pages)
 src/
   assets/images/              portrait, pubs/<key>.*, projects/<slug>/*
@@ -94,6 +101,26 @@ and `wave-2.svg`, inlined by `src/components/SectionDivider.astro`. Edit the pat
 file with any drawing tool (keep the `viewBox` and `stroke="currentColor"`), change
 `--divider-height`, `--divider-stroke` or `--divider-color` in `tokens.css`, or remove the
 `<SectionDivider />` lines from `src/pages/index.astro` to go back to plain spacing.
+
+### Favicon and app icons
+
+`npm run icons` regenerates `public/favicon.svg` (a Poppins "D" on a rounded square, inverted in
+dark mode), `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` and
+`site.webmanifest` from `scripts/icons.mjs`. Change the letter, colours or corner radius at the
+top of that script.
+
+### Sitemap and robots
+
+`@astrojs/sitemap` writes `sitemap-index.xml` on every build, listing the real pages only (no
+redirect stubs, no 404). `robots.txt` allows crawling and points at the sitemap on production
+and local builds, and disallows everything on the staging site.
+
+### Visitor counter
+
+The site can count page views with [GoatCounter](https://www.goatcounter.com) (free for personal
+sites, no cookies) through a 1 px image, so no script is added. Create an account, then put the
+site code (the subdomain, e.g. `danielcz` for `danielcz.goatcounter.com`) in `GOATCOUNTER_CODE` in
+`src/lib/site.ts`. The image only renders on production builds, never on staging or locally.
 
 ### CV
 
@@ -241,7 +268,36 @@ SITE_URL=https://dcz-xyz.github.io BASE_PATH=/danielcz.xyz/ npm run check
 
 ## Launch (DNS cutover)
 
-1. Change `SITE_URL` and `BASE_PATH` in `.github/workflows/deploy.yml` to the production values.
-2. Add `public/CNAME` containing `danielcz.xyz`.
-3. Push, then in Settings → Pages set the custom domain to `danielcz.xyz` and enforce HTTPS
-   once the DNS check passes. Full steps are in the launch checklist of the project spec.
+Before cutting over: the staging site at `https://dcz-xyz.github.io/danielcz.xyz/` has been
+reviewed and `npm run launch-check` passes.
+
+1. In `.github/workflows/deploy.yml` set `SITE_URL: https://danielcz.xyz` and `BASE_PATH: /`.
+2. Add `public/CNAME` containing `danielcz.xyz`. Commit and push; wait for the deploy.
+3. GitHub repo → Settings → Pages → Custom domain: `danielcz.xyz`. The DNS check fails until step 4.
+4. At the registrar for danielcz.xyz (Squarespace → Settings → Domains shows where each domain
+   lives), replace the old records with GitHub Pages' records. Check the current values on
+   [GitHub's custom-domain docs](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
+   before entering them; as of October 2026 they are:
+
+   | Host  | Type    | Value               |
+   | ----- | ------- | ------------------- |
+   | `@`   | `A`     | `185.199.108.153`   |
+   | `@`   | `A`     | `185.199.109.153`   |
+   | `@`   | `A`     | `185.199.110.153`   |
+   | `@`   | `A`     | `185.199.111.153`   |
+   | `www` | `CNAME` | `dcz-xyz.github.io` |
+
+   Remove any other `A`, `AAAA` or `CNAME` records for `@` and `www` that pointed at Squarespace.
+
+5. When the Pages DNS check passes, tick "Enforce HTTPS". Then test from a phone on cellular:
+   `https://danielcz.xyz/`, a project page, `https://danielcz.xyz/mobiprint` (legacy redirect),
+   a PDF, and `https://www.danielcz.xyz/` (should land on the apex).
+6. At the registrar for danielcamposzamora.com, set a permanent (301) forward to
+   `https://danielcz.xyz`, preserving paths if offered.
+7. Google Search Console: add the `danielcz.xyz` property, submit `/sitemap-index.xml`, and
+   request removal of the old `/test1/` placeholder URLs.
+8. Keep both sites reachable for a week, then cancel the Squarespace site plan (not the domain
+   registration).
+
+Rollback: restore the previous DNS records at the registrar; the old site returns within the
+propagation window as long as the Squarespace plan is still active.

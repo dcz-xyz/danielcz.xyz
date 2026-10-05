@@ -32,12 +32,20 @@ export default defineConfig([
     },
   },
   {
-    files: ['scripts/**', 'tests/**', '*.config.*', 'lighthouserc.cjs'],
+    files: [
+      'scripts/**',
+      'tests/**',
+      '*.config.*',
+      'lighthouserc.cjs',
+      'lighthouserc.dark.cjs',
+      'lighthouse.base.cjs',
+    ],
     languageOptions: { globals: { ...globals.node } },
   },
   {
-    files: ['lighthouserc.cjs'],
+    files: ['lighthouserc.cjs', 'lighthouserc.dark.cjs', 'lighthouse.base.cjs'],
     languageOptions: { sourceType: 'commonjs' },
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
   },
   {
     files: ['src/**/*.ts'],

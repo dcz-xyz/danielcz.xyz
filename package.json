@@ -22,8 +22,10 @@
     "check:ci": "npm run format:check && npm run lint && npm run typecheck && npm run content && npm run build && npm run budget",
     "check": "npm run check:ci && npm run test:e2e && npm run lighthouse",
     "content": "node scripts/content-report.mjs",
-    "lighthouse": "lhci autorun",
-    "pdf-thumbs": "node scripts/pdf-thumbnails.mjs"
+    "lighthouse": "lhci autorun --config=lighthouserc.cjs && lhci autorun --config=lighthouserc.dark.cjs && node scripts/lighthouse-report.mjs",
+    "pdf-thumbs": "node scripts/pdf-thumbnails.mjs",
+    "icons": "node scripts/icons.mjs",
+    "launch-check": "npm run check && node scripts/content-report.mjs --strict && SITE_URL=https://dcz-xyz.github.io BASE_PATH=/danielcz.xyz/ npm run build && node scripts/staging-smoke.mjs && npm run build"
   },
   "dependencies": {
     "@fontsource/poppins": "^5.3.0",
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@astrojs/sitemap": "^3.7.4",
     "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.15.1",
@@ -45,6 +48,7 @@
     "eslint-plugin-jsx-a11y-x": "^0.2.0",
     "globals": "^17.13.0",
     "linkinator": "^8.1.0",
+    "opentype.js": "^2.0.0",
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
     "typescript": "~6.0.3",
