@@ -18,7 +18,7 @@ gallery:
     alt: Animation of the fabrication process showing a heated ball transfer roll over two plastic sheets and weld them together.
 
   - src: ../../assets/images/projects/soft-robot-interfaces/inflate-source-05.gif
-    alt: Animation showing an air bubble be inflated and curl up. 
+    alt: Animation showing an air bubble inflate and curl up. 
 
   - src: ../../assets/images/projects/soft-robot-interfaces/heatsealtableiso.jpg
     alt: 3D rendering of the fabrication machine made of extruded aluminum brackets and a metallic table surface. 
@@ -27,11 +27,11 @@ gallery:
     alt: Photograph showing a black robot arm mounted on a stand. The "forearm" of the arm is covered with an air bubble. A person's hand holds an unfolded air bubble to expose the upper arm of the robot. 
 
   - src: ../../assets/images/projects/soft-robot-interfaces/img-1364.jpg
-    alt: TODO alt text (img-1364.jpg)
+    alt: Image showing a hand squeeze the "forearm" of a robot arm that has been equipped with an airbubble. 
 
   - src: ../../assets/images/projects/soft-robot-interfaces/robot-sense.gif
 
-    alt: TODO alt text (robot-sense.gif)
+    alt: GIF showing a person attach the air bubble using velcro and press on it. 
 links:
   paper: airbag
 legacyPaths: [/soft-pneumatic-interfaces]

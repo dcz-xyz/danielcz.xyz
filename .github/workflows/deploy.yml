@@ -15,12 +15,11 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Staging: the GitHub project site. At launch change these to
-  #   SITE_URL: https://danielcz.xyz
-  #   BASE_PATH: /
-  # and add public/CNAME containing "danielcz.xyz" (see README, "Launch").
-  SITE_URL: https://dcz-xyz.github.io
-  BASE_PATH: /danielcz.xyz/
+  # Production: the custom domain (cut over 2026-10-07). For a staging build on the
+  # GitHub project site use SITE_URL: https://dcz-xyz.github.io and BASE_PATH: /danielcz.xyz/
+  # (see README, "Deploy").
+  SITE_URL: https://danielcz.xyz
+  BASE_PATH: /
 
 jobs:
   build:
