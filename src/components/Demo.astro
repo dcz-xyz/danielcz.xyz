@@ -18,19 +18,19 @@ const { name } = Astro.props;
 {name === 'MoireExplorer' && (
   <section class="container demo rise" aria-labelledby="demo-heading" data-demo="MoireExplorer">
     <h2 id="demo-heading" class="demo__title">
-      Explore the moiré effect
+      Visualize the Moiré Effect
     </h2>
     <p class="demo__intro">
       Two line gratings with a slightly different pitch or angle produce a much larger beat pattern.
       Adjust the top layer and watch a small shift turn into a large movement of the fringes, the
-      effect MoiréWidgets uses to sense tiny motions from a distance.
+      effect MoiréWidgets uses to sense subtle motions.
     </p>
     <moire-explorer class="demo__island">
       <div class="demo__fallback" data-fallback>
         <svg
           viewBox="0 0 720 360"
           role="img"
-          aria-label="Two overlapping line gratings forming a moiré beat pattern"
+          aria-label="Two overlapping line gratings forming a moiré pattern"
         >
           <defs>
             <pattern id="moire-bottom" width="12" height="12" patternUnits="userSpaceOnUse">

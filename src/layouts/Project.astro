@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import Base from './Base.astro';
 import Figure from '../components/Figure.astro';
 import Gallery from '../components/gallery/Gallery.astro';
+import { altText, imageName } from '../lib/alt';
 import { href } from '../lib/paths';
 import { doiLabel } from '../lib/publications';
 import { TAG_LABELS } from '../lib/tags';
@@ -21,7 +22,13 @@ const d = project.data;
 // Slideshow layouts show the hero as the first slide; the other layouts keep a
 // separate hero on top and show the gallery after the text.
 const layout = d.galleryLayout;
-const slides = layout === 'slideshow' ? [{ src: d.hero, alt: d.heroAlt }, ...d.gallery] : d.gallery;
+// Missing or placeholder alt text renders as alt="" with a build warning (src/lib/alt.ts).
+const heroAlt = altText(d.heroAlt, `projects/${project.id}: hero (${imageName(d.hero)})`);
+const gallery = d.gallery.map((item, i) => ({
+  ...item,
+  alt: altText(item.alt, `projects/${project.id}: gallery[${i}] (${imageName(item.src)})`),
+}));
+const slides = layout === 'slideshow' ? [{ src: d.hero, alt: heroAlt }, ...gallery] : gallery;
 
 // Social card: the hero at 1200px wide, as an absolute URL.
 const og = await getImage({ src: d.hero, width: 1200, format: 'jpg' });
@@ -44,7 +51,7 @@ const links = paper
   title={d.title}
   description={d.subtitle}
   ogImage={ogImage}
-  ogImageAlt={d.heroAlt}
+  ogImageAlt={heroAlt || undefined}
   hasDemo={Boolean(d.demo)}
 >
   <article class="project">
@@ -65,7 +72,7 @@ const links = paper
       ) : (
         <Figure
           src={d.hero}
-          alt={d.heroAlt}
+          alt={heroAlt}
           widths={[640, 960, 1280, 1600]}
           sizes="(min-width: 1216px) 1120px, calc(100vw - 2 * var(--gutter))"
           priority
@@ -128,9 +135,9 @@ const links = paper
       </div>
     </div>
 
-    {layout !== 'slideshow' && d.gallery.length > 0 && (
+    {layout !== 'slideshow' && gallery.length > 0 && (
       <section class="container project__gallery" aria-label="Gallery">
-        <Gallery layout={layout} items={d.gallery} id="project-gallery" label="Project images" />
+        <Gallery layout={layout} items={gallery} id="project-gallery" label="Project images" />
       </section>
     )}
 

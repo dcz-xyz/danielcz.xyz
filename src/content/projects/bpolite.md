@@ -7,16 +7,16 @@ tags: [not-research]
 order: 4
 collaborators: [Joseph Paetz]
 hero: ../../assets/images/projects/bpolite/bpolite-slight.jpg
-heroAlt: TODO alt text (bpolite-slight.jpg)
+heroAlt: Photo showing the bPolite board mounted on a exterior wall of a building with a pedestrian walking by in the background. 
 thumbnail: ../../assets/images/projects/bpolite/bpolite.jpg
-thumbnailAlt: TODO alt text (bpolite.jpg)
+thumbnailAlt: Photograph showing illuminated 'bPolite' board with dot-led display on the top and "community meeting 5:30 tuesday meet here" written on the chalkboard. 
 gallery:
   - src: ../../assets/images/projects/bpolite/bpolite.jpg
-    alt: TODO alt text (bpolite.jpg)
+    alt: Photograph showing illuminated 'bPolite' board with dot-led display on the top and "community meeting 5:30 tuesday meet here" written on the chalkboard. 
   - src: ../../assets/images/projects/bpolite/bpolite-04.jpg
-    alt: TODO alt text (bpolite-04.jpg)
+    alt: Photograph of the bPolite board with the name on top and a phone number encouraging users to text questions to the board. The board also has an LED display saying bPolite and a chalkboard attached to it where users can write using chalk. 
   - src: ../../assets/images/projects/bpolite/img-5398.jpg
-    alt: TODO alt text (img-5398.jpg)
+    alt: Close-up photo showing someone texting a message to the bPolite board. 
 legacyPaths: [/key-1]
 ---
 

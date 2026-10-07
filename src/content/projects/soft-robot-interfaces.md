@@ -7,25 +7,28 @@ tags: [research]
 order: 7
 collaborators: [Disney Research]
 hero: ../../assets/images/projects/soft-robot-interfaces/hotendandwand.jpg
-heroAlt: TODO alt text (hotendandwand.jpg)
+heroAlt: Two part image showing a 3d render of the compliant Z-Axis mechanism using springds and on the right, a modified ball-transfer heating element. 
 thumbnail: ../../assets/images/projects/soft-robot-interfaces/img-1361.jpg
-thumbnailAlt: TODO alt text (img-1361.jpg)
+thumbnailAlt: Photograph showing a black robot arm mounted on a stand. The "forearm" of the arm is covered with an air bubble. A person's hand holds an unfolded air bubble to expose the upper arm of the robot. 
 gallery:
   - src: ../../assets/images/projects/soft-robot-interfaces/robot-sense-zoomed-1.gif
+    alt: Animation showing a person squeeze an airbubble that is mounted onto the robot arm. 
 
-    alt: TODO alt text (robot-sense-zoomed-1.gif)
   - src: ../../assets/images/projects/soft-robot-interfaces/heat-seal-process-gif-1.gif
+    alt: Animation of the fabrication process showing a heated ball transfer roll over two plastic sheets and weld them together.
 
-    alt: TODO alt text (heat-seal-process-gif-1.gif)
   - src: ../../assets/images/projects/soft-robot-interfaces/inflate-source-05.gif
+    alt: Animation showing an air bubble be inflated and curl up. 
 
-    alt: TODO alt text (inflate-source-05.gif)
   - src: ../../assets/images/projects/soft-robot-interfaces/heatsealtableiso.jpg
-    alt: TODO alt text (heatsealtableiso.jpg)
+    alt: 3D rendering of the fabrication machine made of extruded aluminum brackets and a metallic table surface. 
+
   - src: ../../assets/images/projects/soft-robot-interfaces/img-1361.jpg
-    alt: TODO alt text (img-1361.jpg)
+    alt: Photograph showing a black robot arm mounted on a stand. The "forearm" of the arm is covered with an air bubble. A person's hand holds an unfolded air bubble to expose the upper arm of the robot. 
+
   - src: ../../assets/images/projects/soft-robot-interfaces/img-1364.jpg
     alt: TODO alt text (img-1364.jpg)
+
   - src: ../../assets/images/projects/soft-robot-interfaces/robot-sense.gif
 
     alt: TODO alt text (robot-sense.gif)

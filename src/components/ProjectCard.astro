@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { altText, imageName } from '../lib/alt';
 import { href } from '../lib/paths';
 
 interface Props {
@@ -11,7 +12,10 @@ interface Props {
 const { project, eager = false } = Astro.props;
 const d = project.data;
 const image = d.thumbnail ?? d.hero;
-const alt = d.thumbnail ? (d.thumbnailAlt ?? d.heroAlt) : d.heroAlt;
+const alt = altText(
+  d.thumbnail ? d.thumbnailAlt : d.heroAlt,
+  `projects/${project.id}: card (${imageName(image)})`,
+);
 ---
 
 <li

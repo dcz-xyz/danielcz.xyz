@@ -31,7 +31,7 @@ npm run check
 | Format        | `npm run format:check` | Prettier (with the Astro plugin). `npm run format` fixes.                                                                                                                                                                                                                                                                                                   |
 | Lint          | `npm run lint`         | ESLint: TypeScript, Astro, and jsx-a11y rules.                                                                                                                                                                                                                                                                                                              |
 | Types         | `npm run typecheck`    | `astro check`: TypeScript across pages, components, and tests.                                                                                                                                                                                                                                                                                              |
-| Content       | `npm run content`      | Entry counts, PDF files present, placeholder alt text listed. Schemas themselves are enforced by the build.                                                                                                                                                                                                                                                 |
+| Content       | `npm run content`      | Entry counts, PDF files present, images with missing or placeholder alt text listed as warnings. Schemas themselves are enforced by the build.                                                                                                                                                                                                              |
 | Build         | `npm run build`        | `astro build` exits 0.                                                                                                                                                                                                                                                                                                                                      |
 | JS budget     | `npm run budget`       | Pages without a demo reference zero external scripts; demo pages ship at most 60 KB gzipped.                                                                                                                                                                                                                                                                |
 | Accessibility | `npm run test:e2e`     | axe-core on every built page, in light and dark mode: zero violations.                                                                                                                                                                                                                                                                                      |
@@ -44,9 +44,9 @@ npm run check
 `npm run check:ci` is the subset that runs in GitHub Actions before every deploy (everything
 except the Playwright suite, whose screenshot baselines are macOS renders, and Lighthouse).
 
-`npm run launch-check` is the launch gate: everything in `check`, plus the strict content report
-(no placeholder alt text anywhere) and a staging-configured build checked for base-aware links,
-redirects, `noindex` and `robots.txt`. It must pass before the DNS cutover.
+`npm run launch-check` is the launch gate: everything in `check`, plus a staging-configured build
+checked for base-aware links, redirects, `noindex` and `robots.txt`. It must pass before the DNS
+cutover. Missing alt text is reported as warnings and does not block it.
 
 After an intentional visual change, regenerate the baselines and commit them:
 
@@ -73,6 +73,8 @@ src/
   components/                  Header, Footer, ThemeToggle (+ cards and figures from Phase 2)
   layouts/Base.astro           <head>, skip link, header, main, footer
   lib/paths.ts                 href() helper so links work at "/" and "/danielcz.xyz/"
+  lib/alt.ts                   alt text fallback: a missing text renders alt="" with a warning
+  lib/markdown-base-links.mjs  base prefix for root-relative links in Markdown bodies
   components/home/             About, Publications, Projects sections of the home page
   components/Demo.astro        mounts an interactive island by name
   components/demos/            island code (MoireExplorer.ts)
@@ -131,14 +133,16 @@ PDF to `public/pdfs/` and change that one path; the link checker fails if it doe
 ## Content
 
 All site content lives in `src/content/` and is validated against the schemas in
-`src/content.config.ts` on every build. An entry with a missing field, an unknown field, a bad tag,
-a missing image, or empty alt text fails the build with a message naming the file. The original
-material Daniel supplied is kept in `content-source/` for reference; after Phase 1 it is **not**
-read by the site, so edit `src/content/`.
+`src/content.config.ts` on every build. An entry with a missing field, an unknown field, a bad tag
+or a missing image fails the build with a message naming the file. Alt text is the exception: an
+image whose alt text is missing or still says `TODO` builds anyway, renders with `alt=""`, and is
+printed as a warning (one line naming the entry and the image) by both `npm run content` and
+`astro build`. The original material Daniel supplied is kept in `content-source/` for reference;
+after Phase 1 it is **not** read by the site, so edit `src/content/`.
 
-`npm run content` prints a report: entry counts, publication order, and any alt text still marked
-`TODO`. Placeholder alt text is allowed during development and becomes a hard failure at launch
-(`node scripts/content-report.mjs --strict`).
+`npm run content` prints a report: entry counts, publication order, and every image whose alt text
+is missing or still marked `TODO`. These are warnings and never fail a build or the launch gate.
+`node scripts/content-report.mjs --strict` turns them into a failure if you ever want a hard check.
 
 ### Add a paper
 
@@ -185,7 +189,7 @@ tags: [research] # research | not-research
 order: 3 # position in the Projects grid, 1 = first
 collaborators: [Jon E. Froehlich, Liang He]
 hero: ../../assets/images/projects/mobiprint/img-8880.jpg
-heroAlt: The MobiPrint robot on a white background
+heroAlt: The MobiPrint robot on a white background # recommended; if missing, the build warns and uses alt=""
 thumbnail: ../../assets/images/projects/mobiprint/banner-2.jpg # optional card image, defaults to hero
 thumbnailAlt: MobiPrint printing on a wooden floor
 gallery: # optional, shown in this order on the project page
@@ -198,7 +202,8 @@ links:
 legacyPaths: [/mobiprint] # old Squarespace paths that redirect here
 ---
 
-Body text in Markdown. Paragraphs, links and emphasis work as usual.
+Body text in Markdown. Paragraphs, links and emphasis work as usual. A root-relative link such
+as [Press release](/pdfs/file.pdf) is rewritten for the deploy location at build time.
 ```
 
 Project pages render at `/projects/<slug>/` with the title, subtitle, hero, a metadata strip

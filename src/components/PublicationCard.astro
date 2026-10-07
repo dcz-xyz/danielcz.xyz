@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { altText } from '../lib/alt';
 import { href } from '../lib/paths';
 import { authorRuns, doiLabel } from '../lib/publications';
 
@@ -25,6 +26,7 @@ const pills = [
 
 const runs = authorRuns(authors, equalContribution);
 const pdf = links.pdf ? href(links.pdf) : undefined;
+const alt = altText(thumbnailAlt, `publications/${publication.id}: thumbnail`);
 ---
 
 <article class="pub" id={`pub-${publication.id}`}>
@@ -32,7 +34,7 @@ const pdf = links.pdf ? href(links.pdf) : undefined;
     <a class="pub__thumb pub__thumb--link" href={pdf} aria-label={`Open the PDF of ${title}`}>
       <Picture
         src={thumbnail}
-        alt={thumbnailAlt}
+        alt={alt}
         width={560}
         widths={[280, 560]}
         sizes="(min-width: 640px) 140px, 104px"
@@ -46,7 +48,7 @@ const pdf = links.pdf ? href(links.pdf) : undefined;
     <div class="pub__thumb">
       <Picture
         src={thumbnail}
-        alt={thumbnailAlt}
+        alt={alt}
         width={560}
         widths={[280, 560]}
         sizes="(min-width: 640px) 140px, 104px"

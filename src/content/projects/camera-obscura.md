@@ -7,18 +7,18 @@ tags: [not-research]
 order: 2
 collaborators: []
 hero: ../../assets/images/projects/camera-obscura/concept-sketch-01.jpg
-heroAlt: TODO alt text (concept-sketch-01.jpg)
+heroAlt: Black and white photograph of a sidewalk with a newspaper dispensing box in red labeled "Camera Obscura". 
 gallery:
   - src: ../../assets/images/projects/camera-obscura/damaged-newstands.jpg
-    alt: TODO alt text (damaged-newstands.jpg)
+    alt: 2 x 2 Grid of images shwoing broken and damaged newspaper boxes which have fallen over, filled with garbage, or left behind. 
   - src: ../../assets/images/projects/camera-obscura/img-0109.jpg
-    alt: TODO alt text (img-0109.jpg)
+    alt: Photograph of a full-sized newspaper box mockup that is all-white and made of foamcore. 
   - src: ../../assets/images/projects/camera-obscura/mockup-02.jpg
-    alt: TODO alt text (mockup-02.jpg)
+    alt: Photograph of a full-sized newspaper box mockup made of cardboard.
   - src: ../../assets/images/projects/camera-obscura/mockup-08.jpg
-    alt: TODO alt text (mockup-08.jpg)
+    alt: Photo showing the inside of the cardboard mockup which shows an all-black interior with a sheet to expose the images. 
   - src: ../../assets/images/projects/camera-obscura/pinhole-sample.jpg
-    alt: TODO alt text (pinhole-sample.jpg)
+    alt: Black and white photo showing a sidewalk. Pedestrians and cars are motion-blurred and the buildings are clear. 
 legacyPaths: [/photo-chronicle]
 ---
 

@@ -3,7 +3,7 @@ import { Picture } from 'astro:assets';
 import portrait from '../../assets/images/portrait.jpg';
 import SocialLinks from '../SocialLinks.astro';
 import { href } from '../../lib/paths';
-import { CV_PATH } from '../../lib/site';
+import { CV_PATH, PORTRAIT_ALT } from '../../lib/site';
 
 // Copy and links are verbatim from content-source/about.md.
 const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subject=Hello!%20';
@@ -15,7 +15,7 @@ const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subje
     <div class="about__portrait rise">
       <Picture
         src={portrait}
-        alt="TODO alt text (portrait.jpg)"
+        alt={PORTRAIT_ALT}
         width={960}
         widths={[320, 640, 960]}
         sizes="(min-width: 900px) 360px, (min-width: 640px) 280px, 200px"

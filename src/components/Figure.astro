@@ -48,7 +48,7 @@ const isGif = src.format === 'gif';
       playsinline
       controls
       preload="metadata"
-      aria-label={alt}
+      aria-label={alt || undefined}
     >
       <source src={href(video)} type="video/mp4" />
     </video>

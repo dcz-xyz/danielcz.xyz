@@ -7,14 +7,14 @@ tags: [research]
 order: 3
 collaborators: [Jon E. Froehlich, Liang He]
 hero: ../../assets/images/projects/mobiprint/img-8880.jpg
-heroAlt: TODO alt text (img-8880.jpg)
+heroAlt: Photo of the MobiPrint system consisting of a 3D printer with a modified attachment that reaches to the floor, a robotic vacuum base, and wireless controller. 
 thumbnail: ../../assets/images/projects/mobiprint/banner-2.jpg
-thumbnailAlt: TODO alt text (banner-2.jpg)
+thumbnailAlt: Photo of a cantilevered 3D printer as the print the letters "SCF" in orange plastic on a white floor surface.  
 gallery:
   - src: ../../assets/images/projects/mobiprint/banner-2.jpg
-    alt: TODO alt text (banner-2.jpg)
+    alt: Photo of a cantilevered 3D printer as the print the letters "SCF" in orange plastic on a white floor surface.
   - src: ../../assets/images/projects/mobiprint/mobiprint2-1260x945.webp
-    alt: TODO alt text (mobiprint2-1260x945.webp)
+    alt: Photo of the 3D printer mounted on the robot vacuum as it is printing a yellow cylinder on a wooden floor. 
 links:
   paper: mobiprint
 legacyPaths: [/mobiprint]

@@ -4,7 +4,8 @@
  * (SITE_URL=https://dcz-xyz.github.io BASE_PATH=/danielcz.xyz/):
  * base-prefixed links, base-aware redirects, noindex, robots Disallow.
  */
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 
 const BASE = '/danielcz.xyz/';
 const problems = [];
@@ -21,6 +22,22 @@ must(
   home.includes(`href="https://dcz-xyz.github.io${BASE}"`),
   'canonical does not point at staging',
 );
+
+// Every built page (project bodies included): root-relative hrefs and srcs must carry the base.
+const pages = [];
+const walk = (dir) => {
+  for (const name of readdirSync(dir)) {
+    const file = join(dir, name);
+    if (statSync(file).isDirectory()) walk(file);
+    else if (name.endsWith('.html')) pages.push(file);
+  }
+};
+walk('dist');
+for (const page of pages) {
+  const html = readFileSync(page, 'utf8');
+  for (const m of html.matchAll(/\s(?:href|src)="(\/[^"/][^"]*)"/g))
+    must(m[1].startsWith(BASE), `${page}: link not under base: ${m[1]}`);
+}
 
 const redirect = 'dist/key-1/index.html';
 must(existsSync(redirect), 'legacy redirect page missing');

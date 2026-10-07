@@ -7,14 +7,14 @@ tags: [not-research]
 order: 9
 collaborators: [Spirit Racing Systems]
 hero: ../../assets/images/projects/spirit-racing-systems/copy-of-brandonhongbuggy1dx-0615.jpg
-heroAlt: TODO alt text (copy-of-brandonhongbuggy1dx-0615.jpg)
+heroAlt: Photo showing a missile-shaped small vehicle with a windshield. A person wearing a helmet is inside laying prone controlling a steering mechanism. 
 thumbnail: ../../assets/images/projects/spirit-racing-systems/zuke.jpg
-thumbnailAlt: TODO alt text (zuke.jpg)
+thumbnailAlt: A missle-shaped vehicle painted to look like a world-war 2 fighter plane on a street. 
 gallery:
   - src: ../../assets/images/projects/spirit-racing-systems/sports-buggy-abhinav-02.jpg
-    alt: TODO alt text (sports-buggy-abhinav-02.jpg)
+    alt: Two missile-shaped vehicles racing down a street as a crowd stands behind them. 
   - src: ../../assets/images/projects/spirit-racing-systems/zuke.jpg
-    alt: TODO alt text (zuke.jpg)
+    alt: A missle-shaped vehicle painted to look like a world-war 2 fighter plane on a street. 
 legacyPaths: [/spirit-racing-systems]
 ---
 

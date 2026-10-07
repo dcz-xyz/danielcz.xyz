@@ -7,16 +7,16 @@ tags: [research]
 order: 1
 collaborators: [Adobe Research]
 hero: ../../assets/images/projects/moirewidgets/teaser-figure.png
-heroAlt: TODO alt text (teaser-figure.png)
+heroAlt: Overview figure showing the processing steps on a slider widget. A user interacts with a slider and then two images of Moire pattern illustrate the image processing steps. In the middle, the figure has images of four widgets and on the right the figure shows an audio controller with an accompanying interface to control music playback.
 thumbnail: ../../assets/images/projects/moirewidgets/hand-dial-3.png
-thumbnailAlt: TODO alt text (hand-dial-3.png)
+thumbnailAlt: Image of a hand holding a white dial with a circular moire pattern and blue outlined. 
 gallery:
   - src: ../../assets/images/projects/moirewidgets/samples.png
-    alt: TODO alt text (samples.png)
+    alt: Series of 5 images each showing a hand holding each type of widget including a button, joystick, switch, dial, and slider. 
   - src: ../../assets/images/projects/moirewidgets/hand-dial-3.png
-    alt: TODO alt text (hand-dial-3.png)
+    alt: Image of a hand holding a white dial with a circular moire pattern and blue outlined.
   - src: ../../assets/images/projects/moirewidgets/maxresdefault.jpg
-    alt: TODO alt text (maxresdefault.jpg)
+    alt: A first-person-view photo of a hand using music controller built with MoiréWidgets that has a button, diall, and slider. The hand is moving the slider as a screenshot of a music controller app on the top-right corner controls the volume. 
 links:
   paper: moirewidgets
 legacyPaths: [/moirewidgets]

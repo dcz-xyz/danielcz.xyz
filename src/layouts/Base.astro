@@ -13,7 +13,7 @@ import portrait from '../assets/images/portrait.jpg';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { href, basePath } from '../lib/paths';
-import { GOATCOUNTER_CODE } from '../lib/site';
+import { GOATCOUNTER_CODE, PORTRAIT_ALT } from '../lib/site';
 
 interface Props {
   /** Page title; omitted on the home page so the tab reads just the site name. */
@@ -36,7 +36,7 @@ const pageTitle = title ? `${title} · ${SITE_NAME}` : SITE_NAME;
 // Social card: a page's own image, or the portrait.
 const defaultOg = await getImage({ src: portrait, width: 1200, format: 'jpg' });
 const ogImage = props.ogImage ?? (Astro.site ? new URL(defaultOg.src, Astro.site).href : undefined);
-const ogImageAlt = props.ogImageAlt ?? (props.ogImage ? undefined : 'TODO alt text (portrait.jpg)');
+const ogImageAlt = props.ogImageAlt ?? (props.ogImage ? undefined : PORTRAIT_ALT);
 
 // Canonical URL: Astro.url.pathname may or may not already carry the base.
 const path = Astro.url.pathname;

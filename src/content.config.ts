@@ -4,9 +4,11 @@
  *   src/content/publications/<key>.yaml   one file per paper
  *   src/content/projects/<slug>.md        frontmatter + Markdown body per project
  *
- * The schemas are deliberately strict: every image needs alt text, tags come
- * from a fixed list, unknown fields are rejected, and cross-references
- * (publication <-> project) must resolve. See README.md for the field guide.
+ * The schemas are strict about structure: tags come from a fixed list, unknown
+ * fields are rejected, and cross-references (publication <-> project) must
+ * resolve. Alt text is encouraged, not required: a missing or placeholder alt
+ * is a build warning (src/lib/alt.ts, scripts/content-report.mjs) and the image
+ * renders with alt="". See README.md for the field guide.
  */
 import { defineCollection, reference } from 'astro:content';
 import { z } from 'astro/zod';
@@ -16,6 +18,8 @@ import { DEMOS, PROJECT_TAGS } from './lib/tags';
 
 const nonEmpty = z.string().trim().min(1, 'must not be empty');
 const httpUrl = z.url().startsWith('http', 'must be an absolute http(s) URL');
+/** Alt text: optional; empty or placeholder values are warned about, never rejected. */
+const altText = z.string().trim().default('');
 
 const publications = defineCollection({
   loader: glob({ pattern: '*.yaml', base: './src/content/publications' }),
@@ -35,7 +39,7 @@ const publications = defineCollection({
         /** Publication date; drives the newest-first ordering. */
         date: z.coerce.date(),
         thumbnail: image(),
-        thumbnailAlt: nonEmpty,
+        thumbnailAlt: altText,
         links: z
           .object({
             /** Site-root path to a self-hosted PDF in public/pdfs/. */
@@ -75,10 +79,10 @@ const projects = defineCollection({
         tags: z.array(z.enum(PROJECT_TAGS)).min(1),
         /** Large image at the top of the project page. */
         hero: image(),
-        heroAlt: nonEmpty,
+        heroAlt: altText,
         /** Card image for the Work grid; defaults to the hero when omitted. */
         thumbnail: image().optional(),
-        thumbnailAlt: nonEmpty.optional(),
+        thumbnailAlt: altText.optional(),
         /** Further images for the project page gallery, in display order. */
         gallery: z
           .array(
@@ -86,7 +90,7 @@ const projects = defineCollection({
               .object({
                 /** Still image; for a video this is its poster frame. */
                 src: image(),
-                alt: nonEmpty,
+                alt: altText,
                 caption: z.string().optional(),
                 /** Optional silent MP4 in public/video/, played muted in a loop. */
                 video: z
@@ -121,11 +125,7 @@ const projects = defineCollection({
         /** Name of the interactive island to mount (Phase 4). */
         demo: z.enum(DEMOS).optional(),
       })
-      .strict()
-      .refine((p) => !p.thumbnail || !!p.thumbnailAlt, {
-        message: 'thumbnailAlt is required when thumbnail is set',
-        path: ['thumbnailAlt'],
-      }),
+      .strict(),
 });
 
 export const collections = { publications, projects };

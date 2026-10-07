@@ -25,7 +25,7 @@
     "lighthouse": "lhci autorun --config=lighthouserc.cjs && lhci autorun --config=lighthouserc.dark.cjs && node scripts/lighthouse-report.mjs",
     "pdf-thumbs": "node scripts/pdf-thumbnails.mjs",
     "icons": "node scripts/icons.mjs",
-    "launch-check": "npm run check && node scripts/content-report.mjs --strict && SITE_URL=https://dcz-xyz.github.io BASE_PATH=/danielcz.xyz/ npm run build && node scripts/staging-smoke.mjs && npm run build",
+    "launch-check": "npm run check && SITE_URL=https://dcz-xyz.github.io BASE_PATH=/danielcz.xyz/ npm run build && node scripts/staging-smoke.mjs && npm run build",
     "verify-live": "node scripts/verify-live.mjs"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@astrojs/markdown-satteri": "^0.4.2",
     "@astrojs/sitemap": "^3.7.4",
     "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",

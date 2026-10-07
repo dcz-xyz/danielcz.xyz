@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 /**
  * Content report: counts entries per collection, checks that every self-hosted
- * PDF exists, and lists placeholder alt text ("TODO ...") that Daniel still
- * needs to write. Schema validation itself happens in `astro build`.
+ * PDF exists, and lists every image whose alt text is missing or still a
+ * placeholder ("TODO ..."). Those are warnings: the site builds and the image
+ * renders with alt="" (see src/lib/alt.ts). Schema validation itself happens
+ * in `astro build`.
  *
- *   node scripts/content-report.mjs            warn on placeholder alt text
- *   node scripts/content-report.mjs --strict   fail on placeholder alt text (launch gate)
+ *   node scripts/content-report.mjs            warn on missing or placeholder alt text
+ *   node scripts/content-report.mjs --strict   opt-in: fail on them instead
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -31,7 +33,19 @@ const frontmatter = (text) => {
 };
 
 const problems = [];
-const todos = [];
+const warnings = [];
+
+/** "missing", "placeholder" or null for usable alt text. */
+const altIssue = (value) => {
+  const alt = String(value ?? '').trim();
+  if (!alt) return 'missing';
+  if (PLACEHOLDER.test(alt)) return 'placeholder';
+  return null;
+};
+const checkAlt = (value, where) => {
+  const issue = altIssue(value);
+  if (issue) warnings.push(`${where}: ${issue} alt text`);
+};
 
 const pubs = readDir('src/content/publications', '.yaml').map((e) => ({
   ...e,
@@ -44,7 +58,7 @@ const projects = readDir('src/content/projects', '.md').map((e) => ({
 
 for (const p of pubs) {
   const d = p.data;
-  if (PLACEHOLDER.test(d.thumbnailAlt ?? '')) todos.push(`${p.file}: thumbnailAlt`);
+  checkAlt(d.thumbnailAlt, `${p.file}: thumbnailAlt`);
   if (d.links?.pdf && !existsSync(join('public', d.links.pdf)))
     problems.push(`${p.file}: PDF not found at public${d.links.pdf}`);
   if (!d.links?.pdf) console.warn(`  info: ${p.id} has no PDF link`);
@@ -53,9 +67,10 @@ for (const p of pubs) {
 
 for (const p of projects) {
   const d = p.data;
-  if (PLACEHOLDER.test(d.heroAlt ?? '')) todos.push(`${p.file}: heroAlt`);
+  checkAlt(d.heroAlt, `${p.file}: heroAlt`);
+  if (d.thumbnail) checkAlt(d.thumbnailAlt, `${p.file}: thumbnailAlt`);
   (d.gallery ?? []).forEach((g, i) => {
-    if (PLACEHOLDER.test(g.alt ?? '')) todos.push(`${p.file}: gallery[${i}].alt (${g.src})`);
+    checkAlt(g.alt, `${p.file}: gallery[${i}].alt (${g.src})`);
   });
 }
 
@@ -79,18 +94,18 @@ for (const p of [...projects].sort((a, b) => a.data.order - b.data.order)) {
   );
 }
 
-if (todos.length) {
-  console.log(`  placeholder alt text (${todos.length}):`);
-  for (const t of todos) console.log(`    - ${t}`);
+if (warnings.length) {
+  console.log(`  images without alt text (${warnings.length}, rendered with alt=""):`);
+  for (const w of warnings) console.warn(`    - warning: ${w}`);
 }
 for (const p of problems) console.error(`  error: ${p}`);
 
-if (problems.length || (STRICT && todos.length)) {
+if (problems.length || (STRICT && warnings.length)) {
   console.error(
-    `Content report FAILED${STRICT && todos.length ? ' (strict: placeholder alt text remains)' : ''}.`,
+    `Content report FAILED${STRICT && warnings.length ? ' (strict: alt text missing)' : ''}.`,
   );
   process.exit(1);
 }
 console.log(
-  `Content report OK${todos.length ? ' (placeholder alt text pending, non-fatal until launch)' : ''}.`,
+  `Content report OK${warnings.length ? ` (${warnings.length} alt text warnings)` : ''}.`,
 );
