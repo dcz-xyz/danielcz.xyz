@@ -57,7 +57,9 @@ const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subje
           Engadget among others.
         </p>
       </div>
-      <SocialLinks variant="solid" class="about__social" />
+      <div class="about__social">
+        <SocialLinks variant="solid" />
+      </div>
       <p class="about__actions">
         <a class="button" href={contact}>
           Contact
@@ -101,6 +103,7 @@ const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subje
     font-size: var(--fs-h2);
   }
 
+  /* Wrapper, so the margin cannot be overridden by the list's own reset. */
   .about__social {
     margin-top: var(--space-3);
   }
