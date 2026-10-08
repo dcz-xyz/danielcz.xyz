@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import { parse } from 'yaml';
 import { satteri } from '@astrojs/markdown-satteri';
-import markdownBaseLinks from './src/lib/markdown-base-links.mjs';
+import markdownLinks from './src/lib/markdown-links.mjs';
 
 /**
  * Deployment target is chosen at build time so the same code serves both:
@@ -61,8 +61,8 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    // Root-relative links in project bodies (e.g. /pdfs/x.pdf) get the base prefix on staging.
-    processor: satteri({ hastPlugins: [markdownBaseLinks(base)] }),
+    // Project bodies: root-relative links get the base prefix; links to other sites open in a new tab.
+    processor: satteri({ hastPlugins: [markdownLinks(base)] }),
   },
   // Astro 7 defaults to JSX whitespace rules, which drop the space between a line
   // break and an inline element ("of the\n<a>" -> "of the<a>"). Lossless mode keeps it.

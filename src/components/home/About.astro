@@ -6,6 +6,7 @@ import { href } from '../../lib/paths';
 import { CV_PATH, PORTRAIT_ALT } from '../../lib/site';
 
 // Copy and links are verbatim from content-source/about.md.
+// Links to other sites carry target="_blank" rel="noopener" (new tab); add both to any new one.
 const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subject=Hello!%20';
 ---
 
@@ -30,12 +31,13 @@ const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subje
       <h1 id="about-heading" class="about__heading">
         Hello 👋
       </h1>
+      <!-- prettier-ignore -->
       <div class="prose">
         <p>
           I’m a sixth-year PhD student at the University of Washington in the School of Computer
           Science &amp; Engineering as a member of the
-          <a href="https://makeabilitylab.cs.washington.edu/">Makeability Lab</a> advised by
-          <a href="https://jonfroehlich.github.io/">Jon E. Froehlich</a>. My research combines
+          <a href="https://makeabilitylab.cs.washington.edu/" target="_blank" rel="noopener">Makeability Lab</a> advised by
+          <a href="https://jonfroehlich.github.io/" target="_blank" rel="noopener">Jon E. Froehlich</a>. My research combines
           fabrication, robotics, and sensing to create novel tangible and embodied interactions that
           bridge the physical and digital world. I build systems that leverage material affordances
           at different scales—from individual objects to environments—to enrich the spectrum of
@@ -43,12 +45,12 @@ const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subje
         </p>
         <p>
           Prior to doing my PhD, I was a Disney Imagineer with
-          <a href="https://www.disneyresearch.com/">Disney Research</a> working in robotics, HCI,
-          and augmented reality advised by{' '}
-          <a href="https://ece.illinois.edu/about/directory/faculty/joohyung">Dr. Joohyung Kim</a>{' '}
-          and <a href="https://www.katsuyamane.com/">Dr. Katsu Yamane</a>. I completed my
-          undergraduate studies at Carnegie Mellon University where I worked with{' '}
-          <a href="https://alimomeni.net/ali">Dr. Ali Momeni</a> on physical computing and digital
+          <a href="https://www.disneyresearch.com/" target="_blank" rel="noopener">Disney Research</a> working in robotics, HCI,
+          and augmented reality advised by
+          <a href="https://ece.illinois.edu/about/directory/faculty/joohyung" target="_blank" rel="noopener">Dr. Joohyung Kim</a> and
+          <a href="https://www.katsuyamane.com/" target="_blank" rel="noopener">Dr. Katsu Yamane</a>. I completed my
+          undergraduate studies at Carnegie Mellon University where I worked with
+          <a href="https://alimomeni.net/ali" target="_blank" rel="noopener">Dr. Ali Momeni</a> on physical computing and digital
           fabrication.
         </p>
         <p>

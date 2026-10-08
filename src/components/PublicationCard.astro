@@ -2,6 +2,7 @@
 import { Picture } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { altText } from '../lib/alt';
+import { externalAttrs } from '../lib/links';
 import { href } from '../lib/paths';
 import { authorRuns, doiLabel } from '../lib/publications';
 
@@ -76,7 +77,7 @@ const alt = altText(thumbnailAlt, `publications/${publication.id}: thumbnail`);
       <ul class="pub__links" aria-label={`Links for ${title}`}>
         {pills.map((p) => (
           <li>
-            <a class="pill" href={p.url}>
+            <a class="pill" href={p.url} {...externalAttrs(p.url)}>
               {p.label}
             </a>
           </li>

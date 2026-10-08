@@ -5,6 +5,7 @@ import Base from './Base.astro';
 import Figure from '../components/Figure.astro';
 import Gallery from '../components/gallery/Gallery.astro';
 import { altText, imageName } from '../lib/alt';
+import { externalAttrs } from '../lib/links';
 import { href } from '../lib/paths';
 import { doiLabel } from '../lib/publications';
 import { TAG_LABELS } from '../lib/tags';
@@ -80,7 +81,7 @@ const links = paper
       )}
       {d.video && (
         <p class="project__watch">
-          <a class="button" href={d.video}>
+          <a class="button" href={d.video} {...externalAttrs(d.video)}>
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M8 5v14l11-7z" />
             </svg>
@@ -119,7 +120,7 @@ const links = paper
               <ul class="project__links" aria-label="Related links">
                 {links.map((l) => (
                   <li>
-                    <a class="pill" href={l.url}>
+                    <a class="pill" href={l.url} {...externalAttrs(l.url)}>
                       {l.label}
                     </a>
                   </li>
