@@ -3,7 +3,7 @@
 title: Observation Hives
 subtitle: Art Installation
 year: 2022
-tags: [not-research]
+tags: [independent]
 order: 6
 collaborators: [Ali Momeni]
 hero: ../../assets/images/projects/observation-hives/allaroundus.jpg

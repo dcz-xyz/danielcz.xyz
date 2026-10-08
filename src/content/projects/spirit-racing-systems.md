@@ -3,7 +3,7 @@
 title: Spirit Racing Systems
 subtitle: Composite vehicles for human and gravity powered race
 year: 2011-2015
-tags: [not-research]
+tags: [independent]
 order: 9
 collaborators: [Spirit Racing Systems]
 hero: ../../assets/images/projects/spirit-racing-systems/copy-of-brandonhongbuggy1dx-0615.jpg

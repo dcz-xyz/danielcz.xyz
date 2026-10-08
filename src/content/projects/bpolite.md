@@ -3,7 +3,7 @@
 title: bPolite
 subtitle: Community curated message boards to foster sense of unity.
 year: 2016
-tags: [not-research]
+tags: [independent]
 order: 4
 collaborators: [Joseph Paetz]
 hero: ../../assets/images/projects/bpolite/bpolite-slight.jpg

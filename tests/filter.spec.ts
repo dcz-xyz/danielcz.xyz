@@ -25,7 +25,7 @@ test('projects filter shows only matching projects and announces the count', asy
   for (const t of tags) expect(t.split(' ')).toContain('research');
   await expect(status).toHaveText(`Showing ${research} of ${total} projects`);
 
-  await button('Not Research').click();
+  await button('Independent').click();
   await expect(visible).toHaveCount(total - research);
 
   await button('All').click();

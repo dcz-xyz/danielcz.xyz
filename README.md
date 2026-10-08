@@ -186,7 +186,7 @@ The file name (without `.yaml`) is the paper's key, used by `project.links.paper
 title: MobiPrint
 subtitle: A pipeline for in-situ design and fabrication to adapt physical environments.
 year: 2024 # or a range as a string, e.g. "2011-2015"
-tags: [research] # research | not-research
+tags: [research] # research | independent
 order: 3 # position in the Projects grid, 1 = first
 collaborators: [Jon E. Froehlich, Liang He]
 hero: ../../assets/images/projects/mobiprint/img-8880.jpg

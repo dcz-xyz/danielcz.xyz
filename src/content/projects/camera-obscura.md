@@ -3,7 +3,7 @@
 title: Newsbox Camera Obscura
 subtitle: Converting newspaper vending boxes on city streets into pinhole cameras to capture and preserve the identity of a neighborhood
 year: 2021
-tags: [not-research]
+tags: [independent]
 order: 2
 collaborators: []
 hero: ../../assets/images/projects/camera-obscura/concept-sketch-01.jpg
