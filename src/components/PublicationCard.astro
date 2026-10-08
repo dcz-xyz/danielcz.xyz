@@ -2,7 +2,7 @@
 import { Picture } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { altText } from '../lib/alt';
-import { externalAttrs } from '../lib/links';
+import { newTabAttrs } from '../lib/links';
 import { href } from '../lib/paths';
 import { authorRuns, doiLabel } from '../lib/publications';
 
@@ -32,7 +32,12 @@ const alt = altText(thumbnailAlt, `publications/${publication.id}: thumbnail`);
 
 <article class="pub" id={`pub-${publication.id}`}>
   {pdf ? (
-    <a class="pub__thumb pub__thumb--link" href={pdf} aria-label={`Open the PDF of ${title}`}>
+    <a
+      class="pub__thumb pub__thumb--link"
+      href={pdf}
+      aria-label={`Open the PDF of ${title}`}
+      {...newTabAttrs(pdf)}
+    >
       <Picture
         src={thumbnail}
         alt={alt}
@@ -77,7 +82,7 @@ const alt = altText(thumbnailAlt, `publications/${publication.id}: thumbnail`);
       <ul class="pub__links" aria-label={`Links for ${title}`}>
         {pills.map((p) => (
           <li>
-            <a class="pill" href={p.url} {...externalAttrs(p.url)}>
+            <a class="pill" href={p.url} {...newTabAttrs(p.url)}>
               {p.label}
             </a>
           </li>

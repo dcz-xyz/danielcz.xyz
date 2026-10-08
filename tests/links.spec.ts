@@ -37,11 +37,14 @@ test('no broken internal links', async ({ baseURL }) => {
 });
 
 /**
- * Links to other sites open in a new tab (target=_blank with rel=noopener);
- * links within the site never do. Covers hand-written anchors, the data-driven
- * pills and buttons, and Markdown bodies.
+ * Links to other sites and to PDFs open in a new tab (target=_blank with
+ * rel=noopener); links to pages within the site never do. Covers hand-written
+ * anchors, the data-driven pills and buttons, and Markdown bodies.
  */
-test('external links open in a new tab, internal links do not', async ({ page, baseURL }) => {
+test('external links and PDFs open in a new tab, internal pages do not', async ({
+  page,
+  baseURL,
+}) => {
   const origin = new URL(baseURL!).origin;
   for (const path of ['/', '/projects/observation-hives/', '/projects/robot-gaze/']) {
     await page.goto(path);
@@ -52,12 +55,15 @@ test('external links open in a new tab, internal links do not', async ({ page, b
         rel: a.getAttribute('rel') ?? '',
       })),
     );
+    const isPdf = (href: string) => /\.pdf(?:[?#]|$)/i.test(href);
     const external = links.filter(
       (l) => /^https?:\/\//i.test(l.href) && !l.href.startsWith(origin),
     );
-    const internal = links.filter((l) => !/^[a-z]+:/i.test(l.href));
+    const pdfs = links.filter((l) => !/^https?:\/\//i.test(l.href) && isPdf(l.href));
+    const internal = links.filter((l) => !/^[a-z]+:/i.test(l.href) && !isPdf(l.href));
     expect(external.length, `${path} has external links`).toBeGreaterThan(0);
-    for (const l of external) {
+    expect(pdfs.length, `${path} has PDF links`).toBeGreaterThan(0);
+    for (const l of [...external, ...pdfs]) {
       expect(l.target, `${path}: ${l.href} should open in a new tab`).toBe('_blank');
       expect(l.rel.split(/\s+/), `${path}: ${l.href} needs rel=noopener`).toContain('noopener');
     }

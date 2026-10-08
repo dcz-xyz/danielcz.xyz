@@ -1,4 +1,5 @@
 ---
+import { newTabAttrs } from '../lib/links';
 import { href } from '../lib/paths';
 import { CV_PATH } from '../lib/site';
 
@@ -19,7 +20,9 @@ const nav = [
       <ul class="site-nav">
         {nav.map((item) => (
           <li>
-            <a href={href(item.to)}>{item.label}</a>
+            <a href={href(item.to)} {...newTabAttrs(item.to)}>
+              {item.label}
+            </a>
           </li>
         ))}
       </ul>

@@ -2,6 +2,7 @@
 import { Picture } from 'astro:assets';
 import portrait from '../../assets/images/portrait.jpg';
 import SocialLinks from '../SocialLinks.astro';
+import { newTabAttrs } from '../../lib/links';
 import { href } from '../../lib/paths';
 import { CV_PATH, PORTRAIT_ALT } from '../../lib/site';
 
@@ -66,7 +67,7 @@ const contact = 'mailto:danielcz@cs.uw.edu?bcc=danieljcampos19%40gmail.com&subje
         <a class="button" href={contact}>
           Contact
         </a>
-        <a class="button button--secondary" href={href(CV_PATH)}>
+        <a class="button button--secondary" href={href(CV_PATH)} {...newTabAttrs(CV_PATH)}>
           CV
         </a>
       </p>

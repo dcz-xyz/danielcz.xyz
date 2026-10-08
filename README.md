@@ -74,7 +74,7 @@ src/
   layouts/Base.astro           <head>, skip link, header, main, footer
   lib/paths.ts                 href() helper so links work at "/" and "/danielcz.xyz/"
   lib/alt.ts                   alt text fallback: a missing text renders alt="" with a warning
-  lib/links.ts                 external links open in a new tab (externalAttrs)
+  lib/links.ts                 links to other sites and PDFs open in a new tab (newTabAttrs)
   lib/markdown-links.mjs       same for Markdown bodies, plus the base prefix for root-relative links
   components/home/             About, Publications, Projects sections of the home page
   components/Demo.astro        mounts an interactive island by name
@@ -204,8 +204,9 @@ legacyPaths: [/mobiprint] # old Squarespace paths that redirect here
 ---
 
 Body text in Markdown. Paragraphs, links and emphasis work as usual. A root-relative link such
-as [Press release](/pdfs/file.pdf) is rewritten for the deploy location at build time, and a
-link to another site opens in a new tab.
+as [Press release](/pdfs/file.pdf) is rewritten for the deploy location at build time; links to
+other sites and to PDFs open in a new tab. (After editing src/lib/markdown-links.mjs itself, run
+`npm run build -- --force` once: rendered bodies are cached and do not notice plugin changes.)
 ```
 
 Project pages render at `/projects/<slug>/` with the title, subtitle, hero, a metadata strip
